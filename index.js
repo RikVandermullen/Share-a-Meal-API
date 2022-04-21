@@ -21,40 +21,42 @@ app.get("/", (req, res) => {
   });
 });
 
-app.post("/api/movie", (req, res) => {
-  let movie = req.body;
+app.post("/api/user", (req, res) => {
+  let user = req.body;
   id++;
-  movie = {
+  user = {
     id,
-    ...movie,
+    ...user,
   };
-  console.log(movie);
-  database.push(movie);
+  console.log(user);
+  database.push(user);
   res.status(201).json({
     status: 201,
     result: database,
   });
 });
 
-app.get("/api/movie/:movieId", (req, res, next) => {
-  const movieId = req.params.movieId;
-  console.log(`Movie met ID ${movieId} gezocht`);
-  let movie = database.filter((item) => item.id == movieId);
-  if (movie.length > 0) {
-    console.log(movie);
+app.get("/api/user/:userId", (req, res, next) => {
+  const userId = req.params.userId;
+  console.log(`User met ID ${userId} gezocht`);
+  let user = database.filter((item) => item.id == userId);
+  if (user.length > 0) {
+    console.log(user);
     res.status(200).json({
       status: 200,
-      result: movie,
+      result: user,
     });
   } else {
     res.status(401).json({
       status: 401,
-      result: `Movie with ID ${movieId} not found`,
+      result: `User with ID ${userId} not found`,
     });
   }
 });
 
-app.get("/api/movie", (req, res, next) => {
+app.put()
+
+app.get("/api/user", (req, res, next) => {
   res.status(200).json({
     status: 200,
     result: database,
