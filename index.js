@@ -54,6 +54,47 @@ app.get("/api/user/:userId", (req, res, next) => {
   }
 });
 
+app.put("/api/user/:userId", (req, res, next) => {
+  const id = req.params.userId;
+  const updateUser = req.body;
+  database.forEach((u, index) => {
+    if (u.id == id) {
+      user = {
+        id,
+        ...updateUser,
+      };
+      database[index] = user;
+      res.status(201).json({
+        status: 201,
+        result: user,
+      });
+    } else {
+      res.status(401).json({
+        status: 401,
+        result: `User with ID ${id} not updated`,
+      });
+    }
+  })
+})
+
+app.delete("/api/user/:userId", (req, res, next) => {
+  const id = req.params.userId;
+  database.forEach((u, index) => {
+    if (u.id == id) {
+      database.splice(index, 1);
+      res.status(200).json({
+        status: 200,
+        result: `User with ID ${id} is deleted`,
+      });
+    } else {
+      res.status(401).json({
+        status: 401,
+        result: `User with ID ${id} is not deleted`,
+      });
+  }
+})
+})
+
 app.get("/api/user", (req, res, next) => {
   res.status(200).json({
     status: 200,
