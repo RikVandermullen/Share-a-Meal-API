@@ -54,8 +54,6 @@ app.get("/api/user/:userId", (req, res, next) => {
   }
 });
 
-app.put()
-
 app.get("/api/user", (req, res, next) => {
   res.status(200).json({
     status: 200,
