@@ -28,15 +28,22 @@ app.post("/api/user", (req, res) => {
     id,
     ...user,
   };
-  console.log(user);
-  database.push(user);
-  res.status(201).json({
-    status: 201,
-    result: database,
-  });
+  let email = database.filter((item) => item.email == user.email);
+  if (email == 0) {
+    database.push(user);
+    res.status(201).json({
+      status: 201,
+      result: user,
+    });
+  } else {
+    res.status(401).json({
+      status: 401,
+      result: `User with email ${user.email} already exists`,
+    });
+  }
 });
 
-app.get("/api/user/:userId", (req, res, next) => {
+app.get("/api/user/:userId", (req, res) => {
   const userId = req.params.userId;
   console.log(`User met ID ${userId} gezocht`);
   let user = database.filter((item) => item.id == userId);
@@ -54,7 +61,7 @@ app.get("/api/user/:userId", (req, res, next) => {
   }
 });
 
-app.put("/api/user/:userId", (req, res, next) => {
+app.put("/api/user/:userId", (req, res) => {
   const id = req.params.userId;
   const updateUser = req.body;
   database.forEach((u, index) => {
@@ -71,13 +78,13 @@ app.put("/api/user/:userId", (req, res, next) => {
     } else {
       res.status(401).json({
         status: 401,
-        result: `User with ID ${id} not updated`,
+        result: `User with ID ${id} not found and not updated`,
       });
     }
   })
 })
 
-app.delete("/api/user/:userId", (req, res, next) => {
+app.delete("/api/user/:userId", (req, res) => {
   const id = req.params.userId;
   database.forEach((u, index) => {
     if (u.id == id) {
@@ -95,7 +102,7 @@ app.delete("/api/user/:userId", (req, res, next) => {
 })
 })
 
-app.get("/api/user", (req, res, next) => {
+app.get("/api/user", (req, res) => {
   res.status(200).json({
     status: 200,
     result: database,
