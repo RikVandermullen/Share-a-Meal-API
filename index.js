@@ -29,7 +29,7 @@ app.post("/api/user", (req, res) => {
     id,
     ...user,
   };
-  let email = database.filter((item) => item.email == user.email);
+  let email = database.filter((item) => item.emailAdress == user.emailAdress);
   if (email == 0) {
     database.push(user);
     res.status(201).json({
@@ -39,7 +39,7 @@ app.post("/api/user", (req, res) => {
   } else {
     res.status(401).json({
       status: 401,
-      result: `User with email ${user.email} already exists`,
+      result: `User with email ${user.emailAdress} already exists`,
     });
   }
 });
