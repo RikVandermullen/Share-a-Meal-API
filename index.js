@@ -30,7 +30,7 @@ app.post("/api/user", (req, res) => {
     ...user,
   };
   let email = database.filter((item) => item.emailAdress == user.emailAdress);
-  if (email == 0) {
+  if (email.length == 0) {
     database.push(user);
     res.status(201).json({
       status: 201,
