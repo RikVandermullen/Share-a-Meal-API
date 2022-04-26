@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
   });
 
 //Adds new User to database if emailaddress is unqiue
-router.post("/api/user", userController.addUser);
+router.post("/api/user", userController.validateUser, userController.addUser);
   
 //Retrieves User profile (not implemented)
 router.get("/api/user/profile", userController.getUserProfile);
