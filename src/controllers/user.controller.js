@@ -13,14 +13,15 @@ let controller = {
             assert(typeof lastName === 'string', 'Last name must be a string');
             next();
         } catch (err) {
-            console.log(err);
-            res.status(400).json({
+            const error = {
                 status: 400,
-                result: err.toString(),
-            })
+                result: err.message,
+            };
+            
+            next(error);
         }
     },
-    addUser: (req, res) => {
+    addUser: (req, res, next) => {
         let user = req.body;
         id++;
         user = {
@@ -35,10 +36,11 @@ let controller = {
                 result: user,
             });
         } else {
-            res.status(401).json({
+            const error = {
                 status: 401,
-                result: `User with email ${user.emailAdress} already exists`,
-            });
+                result: `User with email ${user.emailAdress} already exists`
+            }
+            next(error);
         }
     },
     getAllUsers: (req, res) => {
@@ -47,7 +49,7 @@ let controller = {
             result: database,
         });
     },
-    updateUser: (req, res) => {
+    updateUser: (req, res, next) => {
         const id = req.params.userId;
         const newUserInfo = req.body;
         let userArray = database.filter((item) => item.id == id);
@@ -64,13 +66,14 @@ let controller = {
                 result: user,
             });
         } else {
-            res.status(401).json({
+            const error = {
                 status: 401,
-                result: `User with ID ${id} was not found and not updated`,
-        });
+                result: `User with ID ${id} was not found and not updated`
+            }
+            next(error);
         }
     },
-    deleteUser: (req, res) => {
+    deleteUser: (req, res, next) => {
         const id = req.params.userId;
         let userArray = database.filter((item) => item.id == id);
         if (userArray.length > 0) {
@@ -82,13 +85,14 @@ let controller = {
                 result: `User with ID ${id} is deleted`,
             });
         } else {
-            res.status(401).json({
+            const error = {
                 status: 401,
-                result: `User with ID ${id} was not found and not deleted`,
-            });
+                result: `User with ID ${id} was not found and not deleted`
+            }
+            next(error);
         }
     },
-    getUserById: (req, res) => {
+    getUserById: (req, res, next) => {
         const userId = req.params.userId;
         console.log(`User met ID ${userId} gezocht`);
         let user = database.filter((item) => item.id == userId);
@@ -99,17 +103,19 @@ let controller = {
                 result: user,
             });
         } else {
-            res.status(401).json({
+            const error = {
                 status: 401,
                 result: `User with ID ${userId} not found`,
-            });
+            }
+            next(error);
         }
     },
-    getUserProfile: (req, res) => {
-        res.status(401).json({
+    getUserProfile: (req, res, next) => {
+        const error = {
             status: 401,
-            result: "This functionality has not yet been implemented",
-        });
+            result: "This functionality has not yet been implemented" 
+        }
+        next(error);
     }
 }
 module.exports = controller;
