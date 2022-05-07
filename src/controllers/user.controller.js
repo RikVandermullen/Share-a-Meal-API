@@ -92,7 +92,6 @@ let controller = {
                         connection.query(`SELECT * FROM user WHERE id = ${id};`, function (error, results, fields) {
                             connection.release();
                             if (error) throw error;
-                                        
                             res.status(200).json({
                                 status: 200,
                                 result: results,
