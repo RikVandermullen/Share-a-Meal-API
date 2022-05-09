@@ -61,11 +61,24 @@ let controller = {
         });
     },
     getAllUsers: (req, res) => {
+        let query = req.query;
+        let {active, name} = query;
+
+        let sqlQuery = 'SELECT * FROM user;';
+
+        if (active != undefined && name != undefined) {
+            sqlQuery = `SELECT * FROM user WHERE isActive = ${active} AND firstName = '${name}';`;
+        } else if (active != undefined && name == undefined) {
+            sqlQuery = `SELECT * FROM user WHERE isActive = ${active};`;
+        } else if (active == undefined && name != undefined) {
+            sqlQuery = `SELECT * FROM user WHERE firstName = '${name}';`;
+        }
+
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
 
             // retrieves all users
-            connection.query('SELECT * FROM user;', function (error, results, fields) {
+            connection.query(sqlQuery, function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
                 console.log('#results = ',results.length);
