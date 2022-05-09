@@ -44,7 +44,7 @@ let controller = {
                     console.log(error)
                     connection.release();
                     const newError = {
-                        status: 401,
+                        status: 409,
                         result: `User with email: ${user.emailAdress} already exists.`
                     }
                     next(newError);
@@ -53,8 +53,8 @@ let controller = {
                     connection.query('SELECT * FROM user ORDER BY id DESC LIMIT 1;', function (error, results, fields) {
                         connection.release();
                         if (error) throw error;
-                        res.status(200).json({
-                            status: 200,
+                        res.status(201).json({
+                            status: 201,
                             result: results,
                         });
                     });
@@ -108,7 +108,7 @@ let controller = {
                 if (error) {
                     connection.release();
                     const newError = {
-                        status: 401,
+                        status: 400,
                         result: `A user with ${newUserInfo.emailAdress} already exists.`
                     }
                     next(newError);
@@ -129,7 +129,7 @@ let controller = {
                         })
                     } else {
                         const error = {
-                            status: 401,
+                            status: 400,
                             result: `User with ID ${id} not updated because it was not found.`,
                         }
                         next(error);
@@ -157,7 +157,7 @@ let controller = {
                     });
                 } else {
                     const error = {
-                        status: 401,
+                        status: 400,
                         result: `User with ID ${id} was not found and not deleted`
                     }
                     next(error);
@@ -185,7 +185,7 @@ let controller = {
                     });
                 } else {
                     const error = {
-                        status: 401,
+                        status: 404,
                         result: `User with ID ${userId} not found`,
                     }
                     next(error);
@@ -195,7 +195,7 @@ let controller = {
     },
     getUserProfile: (req, res, next) => {
         const error = {
-            status: 401,
+            status: 400,
             result: "This functionality has not yet been implemented" 
         }
         next(error);
