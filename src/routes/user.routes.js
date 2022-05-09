@@ -1,5 +1,4 @@
 const express = require('express');
-const controller = require('../controllers/user.controller');
 const router = express.Router();
 const userController = require('../controllers/user.controller')
 
@@ -17,15 +16,15 @@ router.post("/api/user", userController.validateUser, userController.addUser);
 router.get("/api/user/profile", userController.getUserProfile);
   
 //Retrieves User info based on id paramater
-router.get("/api/user/:userId", controller.getUserById);
+router.get("/api/user/:userId", userController.getUserById);
   
 //Updates User info based on id paramater
-router.put("/api/user/:userId", controller.updateUser);
+router.put("/api/user/:userId", userController.validateUser ,userController.updateUser);
   
 //Deletes User based on id paramater
-router.delete("/api/user/:userId", controller.deleteUser);
+router.delete("/api/user/:userId", userController.deleteUser);
   
 //Retrieves all Users info
-router.get("/api/user", controller.getAllUsers);
+router.get("/api/user", userController.getAllUsers);
 
 module.exports = router;
