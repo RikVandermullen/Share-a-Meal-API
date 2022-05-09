@@ -4,7 +4,7 @@ const dbconnection = require('../../database/dbconnection')
 let controller = {
     validateUser: (req, res, next) => {
         let user = req.body;
-        let {emailAdress, password, firstName, lastName, phoneNumber} = user;
+        let {emailAdress, password, firstName, lastName, phoneNumber, street, city} = user;
         
         // validates user attributes
         try {
@@ -21,6 +21,8 @@ let controller = {
             assert(typeof password === 'string', 'Password must be a string');
             assert(typeof firstName === 'string', 'First name must be a string');
             assert(typeof lastName === 'string', 'Last name must be a string');
+            assert(typeof street === 'string', 'First name must be a string');
+            assert(typeof city === 'string', 'Last name must be a string');
             next();
         } catch (err) {
             const error = {
@@ -64,8 +66,13 @@ let controller = {
         let query = req.query;
         let {active, name} = query;
 
-        let sqlQuery = 'SELECT * FROM user;';
+        if (active == "false") {
+            active = 0;
+        } else if (active == "true") {
+            active = 1;
+        }
 
+        let sqlQuery = 'SELECT * FROM user;';
         if (active != undefined && name != undefined) {
             sqlQuery = `SELECT * FROM user WHERE isActive = ${active} AND firstName = '${name}';`;
         } else if (active != undefined && name == undefined) {
