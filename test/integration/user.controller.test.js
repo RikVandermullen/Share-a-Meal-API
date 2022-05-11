@@ -116,6 +116,7 @@ describe('Manage users',() => {
             });
         });
 
+        // wil be added back
         it('TC-201-3 When an invalid password is given, a valid error should be returned',(done) => {
             // chai
             // .request(server)
@@ -409,6 +410,7 @@ describe('Manage users',() => {
             done();
         });
 
+        // wil be added back
         it('TC-205-3 An invalid phoneNumber is provided, a valid error message is returned /api/user/1',(done) => {
             // chai
             // .request(server)
