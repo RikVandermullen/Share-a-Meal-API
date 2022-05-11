@@ -28,7 +28,7 @@ let controller = {
         } catch (err) {
             const error = {
                 status: 400,
-                result: err.message,
+                message: err.message,
             };
             
             next(error);
@@ -46,7 +46,7 @@ let controller = {
                     connection.release();
                     const newError = {
                         status: 409,
-                        result: `User with email: ${user.emailAdress} already exists.`
+                        message: `User with email: ${user.emailAdress} already exists.`
                     }
                     next(newError);
                 } else {
@@ -56,7 +56,7 @@ let controller = {
                         if (error) throw error;
                         res.status(201).json({
                             status: 201,
-                            result: results,
+                            message: results[0],
                         });
                     });
                 }
@@ -92,7 +92,7 @@ let controller = {
                 console.log('#results = ',results.length);
                 res.status(200).json({
                     status: 200,
-                    result: results,
+                    message: results,
                 });
             });
         });
@@ -110,7 +110,7 @@ let controller = {
                     connection.release();
                     const newError = {
                         status: 400,
-                        result: `A user with ${newUserInfo.emailAdress} does not exist.`
+                        message: `A user with ${newUserInfo.emailAdress} does not exist.`
                     }
                     next(newError);
                 } else {
@@ -124,14 +124,14 @@ let controller = {
                             if (error) throw error;
                             res.status(200).json({
                                 status: 200,
-                                result: results,
+                                message: results,
                             });
                             
                         })
                     } else {
                         const error = {
                             status: 400,
-                            result: `User with ID ${id} not updated because it was not found.`,
+                            message: `User with ID ${id} not updated because it was not found.`,
                         }
                         next(error);
                     }
@@ -154,12 +154,12 @@ let controller = {
                 if (results.affectedRows > 0) {
                     res.status(200).json({
                         status: 200,
-                        result: `User with ID ${id} is deleted`,
+                        message: `User with ID ${id} is deleted`,
                     });
                 } else {
                     const error = {
                         status: 400,
-                        result: `User with ID ${id} was not found and not deleted`
+                        message: `User with ID ${id} was not found and not deleted`
                     }
                     next(error);
                 }
@@ -182,12 +182,12 @@ let controller = {
                 if (results.length > 0) {
                     res.status(200).json({
                         status: 200,
-                        result: results,
+                        message: results,
                     });
                 } else {
                     const error = {
                         status: 404,
-                        result: `User with ID ${userId} not found`,
+                        message: `User with ID ${userId} not found`,
                     }
                     next(error);
                 }
@@ -197,7 +197,7 @@ let controller = {
     getUserProfile: (req, res, next) => {
         const error = {
             status: 400,
-            result: "This functionality has not yet been implemented" 
+            message: "This functionality has not yet been implemented" 
         }
         next(error);
     }

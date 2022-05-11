@@ -41,9 +41,9 @@ describe('Manage users',() => {
         // clearing the test database
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err;
-            connection.query(CLEAR_MEAL_TABLE, function (error, result, field) {
-                connection.query(CLEAR_PARTICIPANTS_TABLE, function (error, result, field) {
-                    connection.query(CLEAR_USERS_TABLE, function (error, result, field) {
+            connection.query(CLEAR_MEAL_TABLE, function (error, message, field) {
+                connection.query(CLEAR_PARTICIPANTS_TABLE, function (error, message, field) {
+                    connection.query(CLEAR_USERS_TABLE, function (error, message, field) {
                         connection.release();
                         done();
                     });
@@ -57,10 +57,10 @@ describe('Manage users',() => {
             console.log('beforeEach called');
             dbconnection.getConnection(function (err, connection) {
                 if (err) throw err // not connected!
-                connection.query(CLEAR_USERS_TABLE, function (error, results, fields) {
+                connection.query(CLEAR_USERS_TABLE, function (error, messages, fields) {
                     // resets auto increment to 1
-                    connection.query('ALTER TABLE user AUTO_INCREMENT = 1;', (error, result, field) => {
-                        connection.query(INSERT_USER, (error, result, field) => {
+                    connection.query('ALTER TABLE user AUTO_INCREMENT = 1;', (error, message, field) => {
+                        connection.query(INSERT_USER, (error, message, field) => {
                             connection.release()
                             if (error) throw error;
                             console.log('beforeEach done');
@@ -86,9 +86,9 @@ describe('Manage users',() => {
             })
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(400);
-                result.should.be.an('string').that.equals('First name must be a string');
+                message.should.be.an('string').that.equals('First name must be a string');
                 done();
             });
         });
@@ -109,9 +109,9 @@ describe('Manage users',() => {
             })
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(400);
-                result.should.be.an('string').that.equals('This email address is not valid, please use a different one.');
+                message.should.be.an('string').that.equals('This email address is not valid, please use a different one.');
                 done();
             });
         });
@@ -132,9 +132,9 @@ describe('Manage users',() => {
             // })
             // .end((err, res) => {
             //     res.should.be.an('object');
-            //     let {status, result} = res.body;
+            //     let {status, message} = res.body;
             //     status.should.equals(400);
-            //     result.should.be.an('string').that.equals('This password is not valid, please use at least 8 characters, one digit, one lower case and one upper case.');
+            //     message.should.be.an('string').that.equals('This password is not valid, please use at least 8 characters, one digit, one lower case and one upper case.');
             //     done();
             // });
             done();
@@ -155,9 +155,9 @@ describe('Manage users',() => {
             })
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(409);
-                result.should.be.an('string').that.equals('User with email: rik@server.com already exists.');
+                message.should.be.an('string').that.equals('User with email: rik@server.com already exists.');
                 done();
             });
         });
@@ -177,9 +177,9 @@ describe('Manage users',() => {
             })
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(201);
-                let expected = [{
+                let expected = {
                     id: 3,
                     firstName: "Other Rik",
                     lastName: "Vandermullen",
@@ -190,8 +190,8 @@ describe('Manage users',() => {
                     roles: 'editor,guest',
                     street: "Kromme Slagen 3",
                     city: "Breda"
-                }]
-                assert.deepEqual(result,expected);
+                }
+                assert.deepEqual(message,expected);
                 done();
             });
         });
@@ -202,10 +202,10 @@ describe('Manage users',() => {
             console.log('beforeEach called');
             dbconnection.getConnection(function (err, connection) {
                 if (err) throw err // not connected!
-                connection.query(CLEAR_USERS_TABLE, function (error, results, fields) {
+                connection.query(CLEAR_USERS_TABLE, function (error, messages, fields) {
                     // resets auto increment to 1
-                    connection.query('ALTER TABLE user AUTO_INCREMENT = 1;', (error, result, field) => {
-                        connection.query(INSERT_USER, (error, result, field) => {
+                    connection.query('ALTER TABLE user AUTO_INCREMENT = 1;', (error, message, field) => {
+                        connection.query(INSERT_USER, (error, message, field) => {
                             connection.release()
                             if (error) throw error;
                             console.log('beforeEach done');
@@ -222,10 +222,10 @@ describe('Manage users',() => {
             .get('/api/user?active=0')
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200);
                 // all users are active so array length should be 0
-                result.should.be.an('array').that.lengthOf(0);
+                message.should.be.an('array').that.lengthOf(0);
                 done();
             });
         });
@@ -236,9 +236,9 @@ describe('Manage users',() => {
             .get('/api/user')
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200);
-                result.should.be.an('array').that.lengthOf(2);
+                message.should.be.an('array').that.lengthOf(2);
                 done();
             });
         });
@@ -249,9 +249,9 @@ describe('Manage users',() => {
             .get('/api/user?name=piet')
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200);
-                result.should.be.an('array').that.lengthOf(0);
+                message.should.be.an('array').that.lengthOf(0);
                 done();
             });
         });
@@ -262,10 +262,10 @@ describe('Manage users',() => {
             .get('/api/user?active=false')
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200);
                 // all users are active so array length should be 0
-                result.should.be.an('array').that.lengthOf(0);
+                message.should.be.an('array').that.lengthOf(0);
                 done();
             });
         });
@@ -276,10 +276,10 @@ describe('Manage users',() => {
             .get('/api/user?active=true')
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200);
                 // all users are active so array length should be 2
-                result.should.be.an('array').that.lengthOf(2);
+                message.should.be.an('array').that.lengthOf(2);
                 done();
             });
         });
@@ -290,10 +290,10 @@ describe('Manage users',() => {
             .get('/api/user?name=Rik')
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200);
                 // only 1 user has the first name Rik so array length should be 1
-                result.should.be.an('array').that.lengthOf(1);
+                message.should.be.an('array').that.lengthOf(1);
                 done();
             });
         });
@@ -304,10 +304,10 @@ describe('Manage users',() => {
             console.log('beforeEach called');
             dbconnection.getConnection(function (err, connection) {
                 if (err) throw err // not connected!
-                connection.query(CLEAR_USERS_TABLE, function (error, results, fields) {
+                connection.query(CLEAR_USERS_TABLE, function (error, messages, fields) {
                     // resets auto increment to 1
-                    connection.query('ALTER TABLE user AUTO_INCREMENT = 1;', (error, result, field) => {
-                        connection.query(INSERT_USER, (error, result, field) => {
+                    connection.query('ALTER TABLE user AUTO_INCREMENT = 1;', (error, message, field) => {
+                        connection.query(INSERT_USER, (error, message, field) => {
                             connection.release()
                             if (error) throw error;
                             console.log('beforeEach done');
@@ -329,9 +329,9 @@ describe('Manage users',() => {
             .get('/api/user/5')
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(404);
-                result.should.be.an('string').that.equals("User with ID 5 not found");
+                message.should.be.an('string').that.equals("User with ID 5 not found");
                 done();
             });
         });
@@ -342,7 +342,7 @@ describe('Manage users',() => {
             .get('/api/user/1')
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200);
                 let expected = [{
                     id: 1,
@@ -356,7 +356,7 @@ describe('Manage users',() => {
                     street: "Kromme Slagen 3",
                     city: "Breda"
                 }]
-                assert.deepEqual(result,expected);
+                assert.deepEqual(message,expected);
                 done();
             });
         });
@@ -367,10 +367,10 @@ describe('Manage users',() => {
             console.log('beforeEach called');
             dbconnection.getConnection(function (err, connection) {
                 if (err) throw err // not connected!
-                connection.query(CLEAR_USERS_TABLE, function (error, results, fields) {
+                connection.query(CLEAR_USERS_TABLE, function (error, messages, fields) {
                     // resets auto increment to 1
-                    connection.query('ALTER TABLE user AUTO_INCREMENT = 1;', (error, result, field) => {
-                        connection.query(INSERT_USER, (error, result, field) => {
+                    connection.query('ALTER TABLE user AUTO_INCREMENT = 1;', (error, message, field) => {
+                        connection.query(INSERT_USER, (error, message, field) => {
                             connection.release()
                             if (error) throw error;
                             console.log('beforeEach done');
@@ -396,9 +396,9 @@ describe('Manage users',() => {
             })
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(400);
-                result.should.be.an('string').that.equals("First name must be a string");
+                message.should.be.an('string').that.equals("First name must be a string");
                 done();
             });
         });
@@ -423,9 +423,9 @@ describe('Manage users',() => {
             // })
             // .end((err, res) => {
             //     res.should.be.an('object');
-            //     let {status, result} = res.body;
+            //     let {status, message} = res.body;
             //     status.should.equals(400);
-            //     result.should.be.an('string').that.equals("This phone number is invalid, please use this format 06 12345678.");
+            //     message.should.be.an('string').that.equals("This phone number is invalid, please use this format 06 12345678.");
             //     done();
             // });
             done();
@@ -448,9 +448,9 @@ describe('Manage users',() => {
             })
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(400);
-                result.should.be.an('string').that.equals("User with ID 5 not updated because it was not found.");
+                message.should.be.an('string').that.equals("User with ID 5 not updated because it was not found.");
                 done();
             });
         });
@@ -477,7 +477,7 @@ describe('Manage users',() => {
             })
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200);
                 let expected = [{
                     id: 1,
@@ -491,7 +491,7 @@ describe('Manage users',() => {
                     street: "Kromme Slagen 3",
                     city: "Amsterdam"
                 }]
-                assert.deepEqual(result,expected);
+                assert.deepEqual(message,expected);
                 done();
             });
         });
@@ -502,10 +502,10 @@ describe('Manage users',() => {
             console.log('beforeEach called');
             dbconnection.getConnection(function (err, connection) {
                 if (err) throw err // not connected!
-                connection.query(CLEAR_USERS_TABLE, function (error, results, fields) {
+                connection.query(CLEAR_USERS_TABLE, function (error, messages, fields) {
                     // resets auto increment to 1
-                    connection.query('ALTER TABLE user AUTO_INCREMENT = 1;', (error, result, field) => {
-                        connection.query(INSERT_USER, (error, result, field) => {
+                    connection.query('ALTER TABLE user AUTO_INCREMENT = 1;', (error, message, field) => {
+                        connection.query(INSERT_USER, (error, message, field) => {
                             connection.release()
                             if (error) throw error;
                             console.log('beforeEach done');
@@ -522,9 +522,9 @@ describe('Manage users',() => {
             .delete('/api/user/5')
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(400);
-                result.should.be.an('string').that.equals("User with ID 5 was not found and not deleted");
+                message.should.be.an('string').that.equals("User with ID 5 was not found and not deleted");
                 done();
             });
         });
@@ -545,9 +545,9 @@ describe('Manage users',() => {
             .delete('/api/user/2')
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200);
-                result.should.be.an('string').that.equals("User with ID 2 is deleted");
+                message.should.be.an('string').that.equals("User with ID 2 is deleted");
                 done();
             });
         });
