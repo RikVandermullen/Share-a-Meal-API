@@ -36,6 +36,7 @@ let controller = {
     },
     addUser: (req, res, next) => {
         let user = req.body;
+        console.log(user);
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
 
