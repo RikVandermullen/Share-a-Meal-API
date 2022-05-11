@@ -39,7 +39,7 @@ let controller = {
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
 
-            // adds new user if emailAdress does not already exists
+            // adds new user if email adddress does not already exists
             connection.query(`INSERT INTO user (firstName, lastName, isActive, street, city, emailAdress, password, phoneNumber) VALUES('${user.firstName}', '${user.lastName}', '${user.isActive}', '${user.street}', '${user.city}', '${user.emailAdress}', '${user.password}', '${user.phoneNumber}');`, function (error, results, fields) {
                 if (error) {
                     console.log(error)
