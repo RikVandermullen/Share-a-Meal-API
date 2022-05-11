@@ -56,7 +56,7 @@ let controller = {
                         if (error) throw error;
                         res.status(201).json({
                             status: 201,
-                            message: results[0],
+                            result: results[0],
                         });
                     });
                 }
