@@ -105,12 +105,12 @@ let controller = {
             if (err) throw err; // not connected!
 
             // updates a user based on id parameter
-            connection.query(`UPDATE user SET firstName = '${newUserInfo.firstName}', lastName = '${newUserInfo.lastName}', isActive = '${newUserInfo.isActive}' street = '${newUserInfo.street}', city = '${newUserInfo.city}', emailAdress = '${newUserInfo.emailAdress}', password = '${newUserInfo.password}', phoneNumber = '${newUserInfo.phoneNumber}' WHERE id = ${id};`, function (error, results, fields) {
+            connection.query(`UPDATE user SET firstName = '${newUserInfo.firstName}', lastName = '${newUserInfo.lastName}', isActive = '${newUserInfo.isActive}', street = '${newUserInfo.street}', city = '${newUserInfo.city}', emailAdress = '${newUserInfo.emailAdress}', password = '${newUserInfo.password}', phoneNumber = '${newUserInfo.phoneNumber}' WHERE id = ${id};`, function (error, results, fields) {
                 if (error) {
                     connection.release();
                     const newError = {
                         status: 400,
-                        result: `A user with ${newUserInfo.emailAdress} already exists.`
+                        result: `A user with ${newUserInfo.emailAdress} does not exist.`
                     }
                     next(newError);
                 } else {

@@ -155,7 +155,7 @@ describe('Manage users',() => {
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, result} = res.body;
-                status.should.equals(401);
+                status.should.equals(409);
                 result.should.be.an('string').that.equals('User with email: rik@server.com already exists.');
                 done();
             });
@@ -177,7 +177,7 @@ describe('Manage users',() => {
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, result} = res.body;
-                status.should.equals(200);
+                status.should.equals(201);
                 let expected = [{
                     id: 3,
                     firstName: "Other Rik",
@@ -329,7 +329,7 @@ describe('Manage users',() => {
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, result} = res.body;
-                status.should.equals(401);
+                status.should.equals(404);
                 result.should.be.an('string').that.equals("User with ID 5 not found");
                 done();
             });
@@ -436,6 +436,7 @@ describe('Manage users',() => {
             .send({
                 firstName: "Rik",
                 lastName: "Vandermullen",
+                isActive: 0,
                 street: "Kromme Slagen 3",
                 // Changed Breda to Amsterdam
                 city: "Amsterdam",
@@ -446,7 +447,7 @@ describe('Manage users',() => {
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, result} = res.body;
-                status.should.equals(401);
+                status.should.equals(400);
                 result.should.be.an('string').that.equals("User with ID 5 not updated because it was not found.");
                 done();
             });
@@ -465,6 +466,7 @@ describe('Manage users',() => {
                 firstName: "Rik",
                 lastName: "Vandermullen",
                 street: "Kromme Slagen 3",
+                isActive: 1,
                 // Changed Breda to Amsterdam
                 city: "Amsterdam",
                 emailAdress: "rik@server.com",
@@ -519,7 +521,7 @@ describe('Manage users',() => {
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, result} = res.body;
-                status.should.equals(401);
+                status.should.equals(400);
                 result.should.be.an('string').that.equals("User with ID 5 was not found and not deleted");
                 done();
             });
