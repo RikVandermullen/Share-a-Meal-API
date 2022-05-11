@@ -159,7 +159,7 @@ let controller = {
                 } else {
                     const error = {
                         status: 400,
-                        message: `User with ID ${id} was not found and not deleted`
+                        message: `User does not exist`
                     }
                     next(error);
                 }

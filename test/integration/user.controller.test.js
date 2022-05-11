@@ -524,7 +524,7 @@ describe('Manage users',() => {
                 res.should.be.an('object');
                 let {status, message} = res.body;
                 status.should.equals(400);
-                message.should.be.an('string').that.equals("User with ID 5 was not found and not deleted");
+                message.should.be.an('string').that.equals("User does not exist");
                 done();
             });
         });
