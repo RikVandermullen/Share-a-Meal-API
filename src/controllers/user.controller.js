@@ -8,6 +8,13 @@ let controller = {
         
         // validates user attributes
         try {
+            assert(typeof emailAdress === 'string', 'Email address must be a string');
+            assert(typeof password === 'string', 'Password must be a string');
+            assert(typeof firstName === 'string', 'First name must be a string');
+            assert(typeof lastName === 'string', 'Last name must be a string');
+            assert(typeof street === 'string', 'First name must be a string');
+            assert(typeof city === 'string', 'Last name must be a string');
+
             // https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
             assert.match(emailAdress, /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "This email address is not valid, please use a different one.")
             
@@ -17,12 +24,6 @@ let controller = {
             // 2 digits, 1 white space, 8 digits
             assert.match(phoneNumber, /^\(?(0)-?6(\s)([0-9]\s{0,3}){8}$/, "This phone number is invalid, please use this format 06 12345678.")
 
-            assert(typeof emailAdress === 'string', 'Email address must be a string');
-            assert(typeof password === 'string', 'Password must be a string');
-            assert(typeof firstName === 'string', 'First name must be a string');
-            assert(typeof lastName === 'string', 'Last name must be a string');
-            assert(typeof street === 'string', 'First name must be a string');
-            assert(typeof city === 'string', 'Last name must be a string');
             next();
         } catch (err) {
             const error = {
@@ -104,7 +105,7 @@ let controller = {
             if (err) throw err; // not connected!
 
             // updates a user based on id parameter
-            connection.query(`UPDATE user SET firstName = '${newUserInfo.firstName}', lastName = '${newUserInfo.lastName}', street = '${newUserInfo.street}', city = '${newUserInfo.city}', emailAdress = '${newUserInfo.emailAdress}', password = '${newUserInfo.password}', phoneNumber = '${newUserInfo.phoneNumber}' WHERE id = ${id};`, function (error, results, fields) {
+            connection.query(`UPDATE user SET firstName = '${newUserInfo.firstName}', lastName = '${newUserInfo.lastName}', isActive = '${newUserInfo.isActive}' street = '${newUserInfo.street}', city = '${newUserInfo.city}', emailAdress = '${newUserInfo.emailAdress}', password = '${newUserInfo.password}', phoneNumber = '${newUserInfo.phoneNumber}' WHERE id = ${id};`, function (error, results, fields) {
                 if (error) {
                     connection.release();
                     const newError = {
