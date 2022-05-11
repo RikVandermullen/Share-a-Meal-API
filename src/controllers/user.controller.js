@@ -182,7 +182,7 @@ let controller = {
                 if (results.length > 0) {
                     res.status(200).json({
                         status: 200,
-                        result: results,
+                        result: results[0],
                     });
                 } else {
                     const error = {
