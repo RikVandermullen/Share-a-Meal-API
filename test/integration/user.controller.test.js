@@ -467,7 +467,7 @@ describe('Manage users',() => {
                 lastName: "Vandermullen",
                 street: "Kromme Slagen 3",
                 isActive: 1,
-                // Changed Breda to Amsterdam
+                // Changed Breda to Amsterdam.
                 city: "Amsterdam",
                 emailAdress: "rik@server.com",
                 password: "Secrets0",
