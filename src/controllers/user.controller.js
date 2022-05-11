@@ -16,13 +16,13 @@ let controller = {
             assert(typeof city === 'string', 'Last name must be a string');
 
             // https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
-            assert.match(emailAdress, /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "This email address is not valid, please use a different one.")
+            // assert.match(emailAdress, /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "This email address is not valid, please use a different one.")
             
             // at least 8 characters, 1 digit, 1 lower case and 1 upper case
-            assert.match(password, /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, 'This password is not valid, please use at least 8 characters, one digit, one lower case and one upper case.')
+            // assert.match(password, /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, 'This password is not valid, please use at least 8 characters, one digit, one lower case and one upper case.')
             
             // 2 digits, 1 white space, 8 digits
-            assert.match(phoneNumber, /^\(?(0)-?6(\s)([0-9]\s{0,3}){8}$/, "This phone number is invalid, please use this format 06 12345678.")
+            // assert.match(phoneNumber, /^\(?(0)-?6(\s)([0-9]\s{0,3}){8}$/, "This phone number is invalid, please use this format 06 12345678.")
 
             next();
         } catch (err) {
