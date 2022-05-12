@@ -41,7 +41,7 @@ let controller = {
             if (err) throw err; // not connected!
 
             // adds new user if email adddress does not already exists
-            connection.query(`INSERT INTO user (firstName, lastName, street, city, emailAdress, password, phoneNumber) VALUES('${user.firstName}', '${user.lastName}', '${user.street}', '${user.city}', '${user.emailAdress}', '${user.password}', '${user.phoneNumber}');`, function (error, results, fields) {
+            connection.query('INSERT INTO user (firstName, lastName, street, city, emailAdress, password, phoneNumber) VALUES(?, ?, ?, ?, ?, ?, ?);', [user.firstName, user.lastName, user.street, user.city, user.emailAdress, user.password, user.phoneNumber], function (error, results, fields) {
                 if (error) {
                     console.log(error)
                     connection.release();
@@ -106,7 +106,7 @@ let controller = {
             if (err) throw err; // not connected!
 
             // updates a user based on id parameter
-            connection.query(`UPDATE user SET firstName = '${newUserInfo.firstName}', lastName = '${newUserInfo.lastName}', isActive = '${newUserInfo.isActive}', street = '${newUserInfo.street}', city = '${newUserInfo.city}', emailAdress = '${newUserInfo.emailAdress}', password = '${newUserInfo.password}', phoneNumber = '${newUserInfo.phoneNumber}' WHERE id = ${id};`, function (error, results, fields) {
+            connection.query('UPDATE user SET firstName=?, lastName=?, isActive=?, street=?, city=?, emailAdress=?, password=?, phoneNumber=? WHERE id = ?;', [newUserInfo.firstName, newUserInfo.lastName, newUserInfo.isActive, newUserInfo.street, newUserInfo.city,newUserInfo.emailAdress, newUserInfo.password, newUserInfo.phoneNumber, id], function (error, results, fields) {
                 if (error) {
                     connection.release();
                     const newError = {
@@ -120,7 +120,7 @@ let controller = {
                         if (err) throw err; // not connected!
 
                         // gets user for the response if a row is changed
-                        connection.query(`SELECT * FROM user WHERE id = ${id};`, function (error, results, fields) {
+                        connection.query('SELECT * FROM user WHERE id = ?;',[id], function (error, results, fields) {
                             connection.release();
                             if (error) throw error;
                             res.status(200).json({
@@ -147,7 +147,7 @@ let controller = {
             if (err) throw err; // not connected!
 
             // deletes user based on id parameter
-            connection.query(`DELETE FROM user WHERE id = ${id};`, function (error, results, fields) {
+            connection.query('DELETE FROM user WHERE id = ?;',[id], function (error, results, fields) {
                 connection.release();
                 if (error) throw error
                 
@@ -175,7 +175,7 @@ let controller = {
             if (err) throw err;
 
             // retrieves user based on id parameter
-            connection.query(`SELECT * FROM user WHERE id = ${userId};`, function (error, results, fields) {
+            connection.query('SELECT * FROM user WHERE id = ?;',[userId], function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
 
