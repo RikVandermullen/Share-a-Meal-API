@@ -76,7 +76,7 @@ let controller = {
 
         let sqlQuery = 'SELECT * FROM user;';
         if (active != undefined && name != undefined) {
-            sqlQuery = `SELECT * FROM user WHERE isActive = ${active} AND firstName = '${name}';`;
+            sqlQuery = `SELECT * FROM user WHERE isActive = ${active} AND firstName LIKE '%${name}%';`;
         } else if (active != undefined && name == undefined) {
             sqlQuery = `SELECT * FROM user WHERE isActive = ${active};`;
         } else if (active == undefined && name != undefined) {
