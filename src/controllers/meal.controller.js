@@ -40,7 +40,7 @@ let controller = {
                     connection.release();
                     const newError = {
                         status: 409,
-                        message: `Meal already exists.`
+                        message: `Meal not created.`
                     }
                     next(newError);
                 } else {
