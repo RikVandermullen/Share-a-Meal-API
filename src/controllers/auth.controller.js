@@ -127,6 +127,31 @@ let controller = {
             })
         }
     },
+    validateOwner(req, res, next) {
+        const mealId = req.params.mealId;
+        const userId = req.userId;
+        
+        dbconnection.getConnection(function(err, connection) {
+            if (err) throw err; // not connected!
+
+            connection.query('SELECT cookId FROM meal WHERE id = ?;',[mealId], function (error, results, fields) {
+                connection.release();
+                if (error) throw error;
+                const cookId = results[0].cookId;
+                
+                // checks if logged in user is the owner of meal
+                if (userId !== cookId) {
+                    const newError = {
+                        status: 403,
+                        message: `A the user: ${userId} is not the owner of meal: ${mealId}.`
+                    }
+                    next(newError);
+                } else {
+                    next();
+                }
+            })
+        })
+    }
 }
 
 module.exports = controller;

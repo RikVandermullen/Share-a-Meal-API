@@ -34,7 +34,7 @@ let controller = {
             if (err) throw err; // not connected!
 
             // adds new meal
-            connection.query('INSERT INTO meal (datetime, maxAmountOfParticipants, price, imageUrl, cookId, name, description) VALUES(?, ?, ?, ?, ?, ?, ?);', [meal.datetime, meal.maxAmountOfParticipants, meal.price, meal.imageUrl, cookId, meal.name, meal.description], function (error, results, fields) {
+            connection.query('INSERT INTO meal (datetime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, isActive, isVega, isVegan, isToTakeHome) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', [meal.datetime, meal.maxAmountOfParticipants, meal.price, meal.imageUrl, cookId, meal.name, meal.description, meal.isActive, meal.isVega, meal.isVegan, meal.isToTakeHome], function (error, results, fields) {
                 if (error) {
                     logger.debug(error)
                     connection.release();
@@ -58,13 +58,11 @@ let controller = {
         });
     },
     getAllMeals: (req, res) => {
-        let sqlQuery = 'SELECT * FROM meal;';
-        
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
 
             // retrieves all users
-            connection.query(sqlQuery, function (error, results, fields) {
+            connection.query('SELECT * FROM meal;', function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
                 logger.debug('#results = ',results.length);
@@ -97,6 +95,76 @@ let controller = {
                     const error = {
                         status: 404,
                         message: `Meal with ID ${mealId} not found`,
+                    }
+                    next(error);
+                }
+            });
+        });
+    },
+    updateMeal: (req, res, next) => {
+        const mealId = req.params.mealId;
+        const newMealInfo = req.body;
+        
+        dbconnection.getConnection(function(err, connection) {
+            if (err) throw err; // not connected!
+
+            // updates a meal based on id parameter
+            connection.query('UPDATE meal SET name = ?, description = ?, isActive = ?, isVega = ?, isVegan = ?, isToTakeHome = ?, datetime = ?, imageUrl = ?, allergenes = ?, maxAmountOfParticipants = ?, price = ? WHERE id = ?;', [newMealInfo.name, newMealInfo.description, newMealInfo.isActive, newMealInfo.isVega, newMealInfo.isVegan, newMealInfo.isToTakeHome, newMealInfo.datetime, newMealInfo.imageUrl, newMealInfo.allergenes, newMealInfo.maxAmountOfParticipants, newMealInfo.price, mealId], function (error, results, fields) {
+                if (error) {
+                    console.log(error)
+                    connection.release();
+                    const newError = {
+                        status: 400,
+                        message: `A meal with id ${mealId} does not exist.`
+                    }
+                    next(newError);
+                } else {
+                    // checks if a row is affected (updated)
+                    if (results.affectedRows > 0) {
+                        if (err) throw err; // not connected!
+
+                        // gets meal for the response if a row is changed
+                        connection.query('SELECT * FROM meal WHERE id = ?;',[mealId], function (error, results, fields) {
+                            connection.release();
+                            if (error) throw error;
+                            res.status(200).json({
+                                status: 200,
+                                message: results,
+                            });
+                            
+                        })
+                    } else {
+                        const error = {
+                            status: 400,
+                            message: `Meal with ID ${mealId} not updated because it was not found.`,
+                        }
+                        next(error);
+                    }
+                }
+            });
+        });
+    },
+    deleteMeal: (req, res, next) => {
+        const mealId = req.params.mealId;
+        
+        dbconnection.getConnection(function(err, connection) {
+            if (err) throw err; // not connected!
+
+            // deletes user based on id parameter
+            connection.query('DELETE FROM meal WHERE id = ?;',[mealId], function (error, results, fields) {
+                connection.release();
+                if (error) throw error
+                
+                // checks if a row is affected (deleted)
+                if (results.affectedRows > 0) {
+                    res.status(200).json({
+                        status: 200,
+                        message: `User with ID ${mealId} is deleted`,
+                    });
+                } else {
+                    const error = {
+                        status: 400,
+                        message: `Meal does not exist`
                     }
                     next(error);
                 }
