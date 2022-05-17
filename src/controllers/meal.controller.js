@@ -43,7 +43,7 @@ let controller = {
                     }
                     next(newError);
                 } else {
-                    // retrieves newest record to return the full user with id
+                    // retrieves newest record to return the full meal with id
                     connection.query('SELECT * FROM meal ORDER BY id DESC LIMIT 1;', function (error, results, fields) {
                         connection.release();
                         if (error) throw error;
@@ -60,7 +60,7 @@ let controller = {
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
 
-            // retrieves all users
+            // retrieves all meals
             connection.query('SELECT * FROM meal;', function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
@@ -79,7 +79,7 @@ let controller = {
 
             if (err) throw err;
 
-            // retrieves user based on id parameter
+            // retrieves meal based on id parameter
             connection.query('SELECT * FROM meal WHERE id = ?;',[mealId], function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
@@ -113,7 +113,7 @@ let controller = {
                     console.log(error)
                     connection.release();
                     const newError = {
-                        status: 400,
+                        status: 404,
                         message: `A meal with id ${mealId} does not exist.`
                     }
                     next(newError);
@@ -134,7 +134,7 @@ let controller = {
                         })
                     } else {
                         const error = {
-                            status: 400,
+                            status: 404,
                             message: `Meal with ID ${mealId} not updated because it was not found.`,
                         }
                         next(error);
@@ -149,7 +149,7 @@ let controller = {
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
 
-            // deletes user based on id parameter
+            // deletes meal based on id parameter
             connection.query('DELETE FROM meal WHERE id = ?;',[mealId], function (error, results, fields) {
                 connection.release();
                 if (error) throw error
@@ -158,11 +158,11 @@ let controller = {
                 if (results.affectedRows > 0) {
                     res.status(200).json({
                         status: 200,
-                        message: `User with ID ${mealId} is deleted`,
+                        message: `Meal with ID ${mealId} is deleted`,
                     });
                 } else {
                     const error = {
-                        status: 400,
+                        status: 404,
                         message: `Meal does not exist`
                     }
                     next(error);
