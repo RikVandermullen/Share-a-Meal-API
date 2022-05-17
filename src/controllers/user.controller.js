@@ -1,5 +1,6 @@
 const assert = require('assert');
 const dbconnection = require('../../database/dbconnection')
+const logger = require('../config/config').logger
 
 let controller = {
     validateUser: (req, res, next) => {
@@ -36,14 +37,14 @@ let controller = {
     },
     addUser: (req, res, next) => {
         let user = req.body;
-        console.log(user);
+        logger.debug(user);
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
 
             // adds new user if email adddress does not already exists
             connection.query('INSERT INTO user (firstName, lastName, street, city, emailAdress, password, phoneNumber) VALUES(?, ?, ?, ?, ?, ?, ?);', [user.firstName, user.lastName, user.street, user.city, user.emailAdress, user.password, user.phoneNumber], function (error, results, fields) {
                 if (error) {
-                    console.log(error)
+                    logger.debug(error)
                     connection.release();
                     const newError = {
                         status: 409,
@@ -90,7 +91,7 @@ let controller = {
             connection.query(sqlQuery, function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
-                console.log('#results = ',results.length);
+                logger.debug('#results = ',results.length);
                 res.status(200).json({
                     status: 200,
                     message: results,
@@ -170,7 +171,7 @@ let controller = {
     getUserById: (req, res, next) => {
         dbconnection.getConnection(function(err, connection) {
             const userId = req.params.userId;
-            console.log(`User met ID ${userId} gezocht`);
+            logger.debug(`User met ID ${userId} gezocht`);
 
             if (err) throw err;
 
@@ -179,7 +180,7 @@ let controller = {
                 connection.release();
                 if (error) throw error;
 
-                console.log('#results = ',results.length);
+                logger.debug('#results = ',results.length);
                 if (results.length > 0) {
                     res.status(200).json({
                         status: 200,

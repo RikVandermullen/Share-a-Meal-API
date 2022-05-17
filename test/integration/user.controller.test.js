@@ -6,6 +6,7 @@ const server = require('../../index');
 const assert = require('assert')
 require('dotenv').config()
 const dbconnection = require('../../database/dbconnection')
+const logger = require('../../src/config/config').logger
 
 chai.should();
 chai.use(chaiHttp);
@@ -54,7 +55,7 @@ describe('Manage users',() => {
 
     describe('UC-201 Register new user /api/user',() => {
         beforeEach((done) => {
-            console.log('beforeEach called');
+            logger.debug('beforeEach called');
             dbconnection.getConnection(function (err, connection) {
                 if (err) throw err // not connected!
                 connection.query(CLEAR_USERS_TABLE, function (error, messages, fields) {
@@ -63,7 +64,7 @@ describe('Manage users',() => {
                         connection.query(INSERT_USER, (error, message, field) => {
                             connection.release()
                             if (error) throw error;
-                            console.log('beforeEach done');
+                            logger.debug('beforeEach done');
                             done();
                         })
                     })
@@ -201,7 +202,7 @@ describe('Manage users',() => {
 
     describe('UC-202 Retrieve users /api/user',() => {
         beforeEach((done) => {
-            console.log('beforeEach called');
+            logger.debug('beforeEach called');
             dbconnection.getConnection(function (err, connection) {
                 if (err) throw err // not connected!
                 connection.query(CLEAR_USERS_TABLE, function (error, messages, fields) {
@@ -210,7 +211,7 @@ describe('Manage users',() => {
                         connection.query(INSERT_USER, (error, message, field) => {
                             connection.release()
                             if (error) throw error;
-                            console.log('beforeEach done');
+                            logger.debug('beforeEach done');
                             done();
                         })
                     })
@@ -303,7 +304,7 @@ describe('Manage users',() => {
 
     describe('UC-204 Retrieve user details /api/user/:userId',() => {
         beforeEach((done) => {
-            console.log('beforeEach called');
+            logger.debug('beforeEach called');
             dbconnection.getConnection(function (err, connection) {
                 if (err) throw err // not connected!
                 connection.query(CLEAR_USERS_TABLE, function (error, messages, fields) {
@@ -312,7 +313,7 @@ describe('Manage users',() => {
                         connection.query(INSERT_USER, (error, message, field) => {
                             connection.release()
                             if (error) throw error;
-                            console.log('beforeEach done');
+                            logger.debug('beforeEach done');
                             done();
                         })
                     })
@@ -366,7 +367,7 @@ describe('Manage users',() => {
 
     describe('UC-205 Update user details /api/user/:userId',() => {
         beforeEach((done) => {
-            console.log('beforeEach called');
+            logger.debug('beforeEach called');
             dbconnection.getConnection(function (err, connection) {
                 if (err) throw err // not connected!
                 connection.query(CLEAR_USERS_TABLE, function (error, messages, fields) {
@@ -375,7 +376,7 @@ describe('Manage users',() => {
                         connection.query(INSERT_USER, (error, message, field) => {
                             connection.release()
                             if (error) throw error;
-                            console.log('beforeEach done');
+                            logger.debug('beforeEach done');
                             done();
                         })
                     })
@@ -502,7 +503,7 @@ describe('Manage users',() => {
 
     describe('UC-206 Delete user /api/user/:userId',() => {
         beforeEach((done) => {
-            console.log('beforeEach called');
+            logger.debug('beforeEach called');
             dbconnection.getConnection(function (err, connection) {
                 if (err) throw err // not connected!
                 connection.query(CLEAR_USERS_TABLE, function (error, messages, fields) {
@@ -511,7 +512,7 @@ describe('Manage users',() => {
                         connection.query(INSERT_USER, (error, message, field) => {
                             connection.release()
                             if (error) throw error;
-                            console.log('beforeEach done');
+                            logger.debug('beforeEach done');
                             done();
                         })
                     })
