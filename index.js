@@ -6,6 +6,7 @@ const port = process.env.PORT;
 
 const userRouter = require('./src/routes/user.routes');
 const authRouter = require('./src/routes/auth.routes');
+const mealRouter = require('./src/routes/meal.routes');
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -19,6 +20,7 @@ app.all("*", (req, res, next) => {
 
 app.use(userRouter);
 app.use(authRouter);
+app.use(mealRouter);
 
 //Return error for incorrect routes
 app.all("*", (req, res) => {
