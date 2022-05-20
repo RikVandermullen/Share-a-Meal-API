@@ -80,18 +80,19 @@ let controller = {
     validateLogin(req, res, next) {
         // Verify that we receive the expected input
         try {
-            assert(
-                typeof req.body.emailAdress === 'string',
-                'email must be a string.'
-            )
-            assert(
-                typeof req.body.password === 'string',
-                'password must be a string.'
-            )
+            assert(typeof req.body.emailAdress === 'string','email must be a string.')
+            assert(typeof req.body.password === 'string','password must be a string.')
+
+            // https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
+            assert.match(emailAdress, /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "This email address is not valid, please use a different one.")
+            
+            // at least 8 characters, 1 digit, 1 lower case and 1 upper case
+            assert.match(password, /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, 'This password is not valid, please use at least 8 characters, one digit, one lower case and one upper case.')
+            
             next()
         } catch (ex) {
             const newError = {
-                status: 422,
+                status: 400,
                 message: ex.toString()
             }
             next(newError);
