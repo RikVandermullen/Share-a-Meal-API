@@ -119,27 +119,26 @@ describe('Manage users',() => {
 
         // wil be added back
         it('TC-201-3 When an invalid password is given, a valid error should be returned',(done) => {
-            // chai
-            // .request(server)
-            // .post('/api/user')
-            // .send({
-            //     firstName: "Rik",
-            //     lastName: "Vandermullen",
-            //     street: "Kromme Slagen 3",
-            //     city: "Breda",
-            //     emailAdress: "rik@server.com",
-            //     // doesn't contain at least 8 characters, 1 digit and 1 upper case letter
-            //     password: "secret",
-            //     phoneNumber: "06 12345678"
-            // })
-            // .end((err, res) => {
-            //     res.should.be.an('object');
-            //     let {status, message} = res.body;
-            //     status.should.equals(400);
-            //     message.should.be.an('string').that.equals('This password is not valid, please use at least 8 characters, one digit, one lower case and one upper case.');
-            //     done();
-            // });
-            done();
+            chai
+            .request(server)
+            .post('/api/user')
+            .send({
+                firstName: "Rik",
+                lastName: "Vandermullen",
+                street: "Kromme Slagen 3",
+                city: "Breda",
+                emailAdress: "rik@server.com",
+                // doesn't contain at least 8 characters, 1 digit and 1 upper case letter
+                password: "secret",
+                phoneNumber: "06 12345678"
+            })
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, message} = res.body;
+                status.should.equals(400);
+                message.should.be.an('string').that.equals('This password is not valid, please use at least 8 characters, one digit, one lower case and one upper case.');
+                done();
+            });
         });
 
         it('TC-201-4 When an user already exists, a valid error should be returned',(done) => {
