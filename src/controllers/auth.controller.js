@@ -8,10 +8,11 @@ let controller = {
         dbconnection.getConnection((err, connection) => {
             if (err) {
                 logger.debug('Error getting connection from dbconnection')
-                res.status(500).json({
-                    error: err.toString(),
-                    datetime: new Date().toISOString(),
-                })
+                const newError = {
+                    status: 500,
+                    message: err.toString()
+                }
+                next(newError);
             }
             if (connection) {
                 // 1. Kijk of deze useraccount bestaat.
@@ -22,10 +23,11 @@ let controller = {
                         connection.release()
                         if (err) {
                             logger.debug('Error: ', err.toString())
-                            res.status(500).json({
-                                error: err.toString(),
-                                datetime: new Date().toISOString(),
-                            })
+                            const newError = {
+                                status: 500,
+                                message: err.toString()
+                            }
+                            next(newError);
                         }
                         if (rows) {
                             // 2. Er was een resultaat, check het password.
@@ -63,11 +65,11 @@ let controller = {
                                 logger.debug(
                                     'User not found or password invalid'
                                 )
-                                res.status(401).json({
-                                    message:
-                                        'User not found or password invalid',
-                                    datetime: new Date().toISOString(),
-                                })
+                                const newError = {
+                                    status: 401,
+                                    message: `User not found or password invalid`
+                                }
+                                next(newError);
                             }
                         }
                     }
@@ -88,10 +90,11 @@ let controller = {
             )
             next()
         } catch (ex) {
-            res.status(422).json({
-                error: ex.toString(),
-                datetime: new Date().toISOString(),
-            })
+            const newError = {
+                status: 422,
+                message: ex.toString()
+            }
+            next(newError);
         }
     },
     validateToken(req, res, next) {
@@ -101,10 +104,11 @@ let controller = {
         const authHeader = req.headers.authorization
         if (!authHeader) {
             logger.debug('Authorization header missing!')
-            res.status(401).json({
-                error: 'Authorization header missing!',
-                datetime: new Date().toISOString(),
-            })
+            const newError = {
+                status: 401,
+                message: `Authorization header missing!`
+            }
+            next(newError);
         } else {
             // Strip the word 'Bearer ' from the headervalue
             const token = authHeader.substring(7, authHeader.length)
@@ -112,10 +116,11 @@ let controller = {
             jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
                 if (err) {
                     logger.debug('Not authorized')
-                    res.status(401).json({
-                        error: 'Not authorized',
-                        datetime: new Date().toISOString(),
-                    })
+                    const newError = {
+                        status: 401,
+                        message: `Not authorized`
+                    }
+                    next(newError);
                 }
                 if (payload) {
                     logger.debug('token is valid', payload)
@@ -137,13 +142,24 @@ let controller = {
             connection.query('SELECT cookId FROM meal WHERE id = ?;',[mealId], function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
-                const cookId = results[0].cookId;
+
+                let cookId;
+                if (!results[0]) {
+                    const newError = {
+                        status: 404,
+                        message: `The meal: ${mealId} does not exist.`
+                    }
+                    next(newError); 
+                } else {
+                    cookId = results[0].cookId;
+                }
+                
                 
                 // checks if logged in user is the owner of meal
                 if (userId !== cookId) {
                     const newError = {
                         status: 403,
-                        message: `A the user: ${userId} is not the owner of meal: ${mealId}.`
+                        message: `The user: ${userId} is not the owner of meal: ${mealId}.`
                     }
                     next(newError);
                 } else {

@@ -33,7 +33,7 @@ let controller = {
             if (err) throw err; // not connected!
 
             // adds new meal
-            connection.query('INSERT INTO meal (datetime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, isActive, isVega, isVegan, isToTakeHome) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', [meal.datetime, meal.maxAmountOfParticipants, meal.price, meal.imageUrl, cookId, meal.name, meal.description, meal.isActive, meal.isVega, meal.isVegan, meal.isToTakeHome], function (error, results, fields) {
+            connection.query('INSERT INTO meal (datetime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, isActive, isVega, isVegan, isToTakeHome, allergenes) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', [meal.datetime, meal.maxAmountOfParticipants, meal.price, meal.imageUrl, cookId, meal.name, meal.description, meal.isActive, meal.isVega, meal.isVegan, meal.isToTakeHome, meal.allergenes], function (error, results, fields) {
                 if (error) {
                     logger.debug(error)
                     connection.release();
@@ -67,7 +67,7 @@ let controller = {
                 logger.debug('#results = ',results.length);
                 res.status(200).json({
                     status: 200,
-                    message: results,
+                    result: results,
                 });
             });
         });
@@ -110,7 +110,6 @@ let controller = {
             // updates a meal based on id parameter
             connection.query('UPDATE meal SET name = ?, description = ?, isActive = ?, isVega = ?, isVegan = ?, isToTakeHome = ?, datetime = ?, imageUrl = ?, allergenes = ?, maxAmountOfParticipants = ?, price = ? WHERE id = ?;', [newMealInfo.name, newMealInfo.description, newMealInfo.isActive, newMealInfo.isVega, newMealInfo.isVegan, newMealInfo.isToTakeHome, newMealInfo.datetime, newMealInfo.imageUrl, newMealInfo.allergenes, newMealInfo.maxAmountOfParticipants, newMealInfo.price, mealId], function (error, results, fields) {
                 if (error) {
-                    console.log(error)
                     connection.release();
                     const newError = {
                         status: 404,
@@ -128,7 +127,7 @@ let controller = {
                             if (error) throw error;
                             res.status(200).json({
                                 status: 200,
-                                message: results,
+                                result: results[0],
                             });
                             
                         })
