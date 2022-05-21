@@ -87,6 +87,11 @@ let controller = {
             connection.query(sqlQuery, function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
+
+                for (let i = 0; i < results.length; i++) {
+                    results[i].isActive = (results[i].isActive) ? true : false;
+                }
+
                 logger.debug('#results = ',results.length);
                 res.status(200).json({
                     status: 200,
@@ -175,10 +180,6 @@ let controller = {
             connection.query('SELECT * FROM user WHERE id = ?;',[userId], function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
-
-                for (let i = 0; i < results.length; i++) {
-                    results[i].isActive = (results[i].isActive) ? true : false;
-                }
 
                 logger.debug('#results = ',results.length);
                 if (results.length > 0) {
