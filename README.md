@@ -1,20 +1,27 @@
 
-# Share-A-Meal API 
+<h1 align="center">Share-A-Meal API</h1> 
+<p align="center">
+  <img width="200" src="https://img.icons8.com/emoji/344/spaghetti-emoji.png" alt="Spaghetti emoji">
+</p>
 
 [![Deploy to Heroku](https://github.com/RikVandermullen/programmeren-4-shareameal/actions/workflows/main.yml/badge.svg)](https://github.com/RikVandermullen/programmeren-4-shareameal/actions/workflows/main.yml)
+![Github Language](https://img.shields.io/github/languages/top/RikVandermullen/programmeren-4-shareameal?color=informational)
+![Github Issues](https://img.shields.io/github/issues/RikVandermullen/programmeren-4-shareameal?label=Issues&color=informational)
 
 ## Introduction
-This repository is a API for
+This repository is a API for making joint eating easier. Users can register themselves and offer a meal and other users can participate that meal. The API is made in JavaScript, uses MySQL as a database and is deployed on Heroku. Endpoints that need safety are secured via JWT-authentication ([jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)).
+
+Link to API: https://rikvandermullen-shareameal.herokuapp.com/
 
 ## Table of Contents
-* [Introduction](##Introduciton)
-* [Packages](##Packages)
-* [Installation](##Installation)
-* [Usage](##Usage)
+* [Introduction](#introduction)
+* [Packages](#packages)
+* [Installation](#installation)
+* [Usage](#usage)
 
 
 ## Packages
-There were multiple packages used for creating this API.....
+There were multiple packages used for creating this API which are listed below.
 
 #### Packages used for production:
 - [ExpressJS](https://expressjs.com/)
@@ -32,7 +39,7 @@ There were multiple packages used for creating this API.....
 
 ## Installation
 
-Download the code or fork this project.
+Download the code as a zip-file or fork/clone this project.
 
 ```javascript
 // install npm packages
@@ -199,3 +206,11 @@ Request: DELETE
 Route: /api/meal/:id/participate
 Request: GET
 ```
+
+## About me
+
+My name is Rik Vandermullen, 23 years old and currently studying Computer Science at Avans University of Applied Sciences.
+
+![rik.vandermullen@gmail.com](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)
+![https://github.com/RikVandermullen](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
+![-](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)
