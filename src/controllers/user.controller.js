@@ -56,6 +56,8 @@ let controller = {
                     connection.query('SELECT * FROM user ORDER BY id DESC LIMIT 1;', function (error, results, fields) {
                         connection.release();
                         if (error) throw error;
+                        // sets isActive on true or false based on 0 or 1
+                        results[0].isActive = user.isActive ? true : false;
                         res.status(201).json({
                             status: 201,
                             result: results[0],
@@ -77,7 +79,7 @@ let controller = {
 
         let sqlQuery = 'SELECT * FROM user;';
         if (active != undefined && name != undefined) {
-            sqlQuery = `SELECT * FROM user WHERE isActive = ${active} AND firstName LIKE '%${name}%';`;
+            sqlQuery = `SELECT * FROM user WHERE isActive = ${active} AND firstName = '${name}';`;
         } else if (active != undefined && name == undefined) {
             sqlQuery = `SELECT * FROM user WHERE isActive = ${active};`;
         } else if (active == undefined && name != undefined) {
