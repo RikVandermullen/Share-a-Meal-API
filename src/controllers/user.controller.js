@@ -176,6 +176,10 @@ let controller = {
                 connection.release();
                 if (error) throw error;
 
+                for (let i = 0; i < results.length; i++) {
+                    results[i].isActive = results[i].isActive ? true : false;
+                }
+
                 logger.debug('#results = ',results.length);
                 if (results.length > 0) {
                     res.status(200).json({
