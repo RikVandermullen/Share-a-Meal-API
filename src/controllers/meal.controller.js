@@ -14,10 +14,10 @@ let controller = {
             assert(typeof imageUrl === 'string', 'Image URL must be a string');
             assert(typeof maxAmountOfParticipants === 'number', 'maxAmountofParticipants must be a number');
             assert(typeof price === 'number', 'Price must be a string');
-            assert(isActive !== undefined, 'isActive must be a number');
-            assert(isVega !== undefined, 'isVega must be a number');
-            assert(isVegan !== undefined, 'isVegan must be a number');
-            assert(isToTakeHome !== undefined, 'isToTakeHome must be a number');
+            // assert(isActive !== undefined, 'isActive must be a number');
+            // assert(isVega !== undefined, 'isVega must be a number');
+            // assert(isVegan !== undefined, 'isVegan must be a number');
+            // assert(isToTakeHome !== undefined, 'isToTakeHome must be a number');
 
             next();
         } catch (err) {
