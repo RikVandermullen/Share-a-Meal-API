@@ -200,6 +200,77 @@ let controller = {
             });
         });
     },
+    participateMeal: (req, res, next) => {
+        const userId = req.userId;
+        const mealId = req.params.mealId;
+
+        dbconnection.getConnection(function(err, connection) {
+            if (err) throw err; // not connected!
+            logger.debug("Requesting participation");
+            connection.query('SELECT * FROM meal WHERE id = ?;',[mealId], function (error, mealInfo, fields) {
+                if (error) throw error
+
+                if (mealInfo.length > 0) {
+                    connection.query('SELECT * FROM meal_participants_user WHERE mealId = ?;',[mealId], function (error, participationResults, fields) {
+                        if (error) throw error
+                        
+                        // check if userId already is participating
+                        let isParticipating = false;
+                        logger.debug("Checking for participation");
+                        for (let i = 0; i < participationResults.length; i++) {
+                            if (participationResults[i].userId == userId) {
+                                isParticipating = true;
+                            }
+                        }
+
+                        // if user is not participating
+                        if (!isParticipating) {
+                            if (participationResults.length < mealInfo[0].maxAmountOfParticipants) {
+                                logger.debug("Adding participation");
+                                connection.query('INSERT INTO meal_participants_user (mealId, userId) VALUES(?,?);',[mealId, userId], function(error, results, fields) {
+                                    if (error) throw error;
+                                    connection.release();
+                                    res.status(200).json({
+                                        status: 200,
+                                        result: {
+                                            currentlyParticipating: true,
+                                            currentAmountOfParticipants: participationResults.length + 1
+                                        },
+                                    });
+                                })
+                            } else {
+                                const error = {
+                                    status: 401,
+                                    message: `There are no available participation spots.`
+                                }
+                                next(error);
+                            }
+                        } else {
+                            logger.debug("Removing participation");
+                            connection.query('DELETE FROM meal_participants_user WHERE mealId = ? AND userId = ?;',[mealId, userId], function(error, results, fields) {
+                                if (error) throw error;
+                                connection.release();
+                                res.status(200).json({
+                                    status: 200,
+                                    result: {
+                                        currentlyParticipating: false,
+                                        currentAmountOfParticipants: participationResults.length - 1
+                                    },
+                                });
+                            })
+                        }
+                        
+                    });
+                } else {
+                    const error = {
+                        status: 404,
+                        message: `Meal: ${mealId} does not exist.`
+                    }
+                    next(error);
+                }
+            });
+        });
+    }
 }
 
 module.exports = controller;

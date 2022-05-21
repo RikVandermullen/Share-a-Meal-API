@@ -18,4 +18,6 @@ router.put("/api/meal/:mealId", authController.validateToken, authController.val
 //Deletes Meal based on id paramater
 router.delete("/api/meal/:mealId", authController.validateToken, authController.validateOwner, mealController.deleteMeal);
 
+router.get("/api/meal/:mealId/participate", authController.validateToken, mealController.participateMeal);
+
 module.exports = router;
