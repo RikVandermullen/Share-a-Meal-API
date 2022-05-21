@@ -13,7 +13,6 @@ let controller = {
             assert(typeof description === 'string', 'Description must be a string');
             assert(typeof imageUrl === 'string', 'Image URL must be a string');
             assert(typeof maxAmountOfParticipants === 'number', 'maxAmountofParticipants must be a number');
-            assert(datetime !== undefined, 'Datetime must be a string');
             assert(typeof price === 'number', 'Price must be a string');
             assert(isActive !== undefined, 'isActive must be a number');
             assert(isVega !== undefined, 'isVega must be a number');
@@ -106,7 +105,7 @@ let controller = {
                     results[0].isVega = results[0].isVega ? true : false;
                     results[0].isVegan = results[0].isVegan ? true : false;
                     results[0].isToTakeHome = results[0].isToTakeHome ? true : false;
-                    
+
                     res.status(200).json({
                         status: 200,
                         result: results[0],
