@@ -29,12 +29,16 @@ let controller = {
         let meal = req.body;
         const cookId = req.userId;
         let allergenes = meal.allergenes.join();
+        if (!meal.dateTime) {
+            meal.dateTime = "NOW()"
+        }
+
         logger.debug(meal);
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
 
             // adds new meal
-            connection.query('INSERT INTO meal (datetime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, isActive, isVega, isVegan, isToTakeHome, allergenes) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', ["NOW()", meal.maxAmountOfParticipants, meal.price, meal.imageUrl, cookId, meal.name, meal.description, meal.isActive, meal.isVega, meal.isVegan, meal.isToTakeHome, allergenes], function (error, results, fields) {
+            connection.query('INSERT INTO meal (datetime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, isActive, isVega, isVegan, isToTakeHome, allergenes) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', [meal.dateTime, meal.maxAmountOfParticipants, meal.price, meal.imageUrl, cookId, meal.name, meal.description, meal.isActive, meal.isVega, meal.isVegan, meal.isToTakeHome, allergenes], function (error, results, fields) {
                 if (error) {
                     logger.debug(error)
                     connection.release();
