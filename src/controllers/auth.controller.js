@@ -24,7 +24,7 @@ let controller = {
                         if (err) {
                             logger.debug('Error: ', err.toString())
                             const newError = {
-                                status: 500,
+                                status: 404,
                                 message: err.toString()
                             }
                             next(newError);

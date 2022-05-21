@@ -5,6 +5,7 @@ const chaiHttp = require('chai-http');
 const server = require('../../index');
 const assert = require('assert')
 require('dotenv').config()
+const jwt = require('jsonwebtoken')
 const dbconnection = require('../../database/dbconnection')
 const logger = require('../../src/config/config').logger
 
@@ -272,7 +273,7 @@ describe('Manage users',() => {
             });
         });
 
-        it('TC-202-4 Show users with query active = true /api/user?active=true',(done) => {
+        it('TC-202-5 Show users with query active = true /api/user?active=true',(done) => {
             chai
             .request(server)
             .get('/api/user?active=true')
@@ -286,7 +287,7 @@ describe('Manage users',() => {
             });
         });
 
-        it('TC-202-5 Show users with query name = Rik /api/user?name=Rik',(done) => {
+        it('TC-202-6 Show users with query name = Rik /api/user?name=Rik',(done) => {
             chai
             .request(server)
             .get('/api/user?name=Rik')
@@ -387,6 +388,10 @@ describe('Manage users',() => {
             chai
             .request(server)
             .put('/api/user/1')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+            )
             .send({
                 // firstName is missing
                 lastName: "Vandermullen",
@@ -406,38 +411,45 @@ describe('Manage users',() => {
         });
 
         it('TC-205-2 An invalid postalCode is provided, a valid error message is returned /api/user/1',(done) => {
-            // not implemented yet.
+            // not implemented.
             done();
         });
 
         // wil be added back
         it('TC-205-3 An invalid phoneNumber is provided, a valid error message is returned /api/user/1',(done) => {
-            // chai
-            // .request(server)
-            // .put('/api/user/1')
-            // .send({
-            //     firstName: "Rik",
-            //     lastName: "Vandermullen",
-            //     street: "Kromme Slagen 3",
-            //     city: "Breda",
-            //     emailAdress: "rik@server.com",
-            //     password: "Secrets0",
-            //     phoneNumber: "06 12345"
-            // })
-            // .end((err, res) => {
-            //     res.should.be.an('object');
-            //     let {status, message} = res.body;
-            //     status.should.equals(400);
-            //     message.should.be.an('string').that.equals("This phone number is invalid, please use this format 06 12345678.");
-            //     done();
-            // });
-            done();
+            chai
+            .request(server)
+            .put('/api/user/1')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+            )
+            .send({
+                firstName: "Rik",
+                lastName: "Vandermullen",
+                street: "Kromme Slagen 3",
+                city: "Breda",
+                emailAdress: "rik@server.com",
+                password: "Secrets0",
+                phoneNumber: "06 12345"
+            })
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, message} = res.body;
+                status.should.equals(400);
+                message.should.be.an('string').that.equals("This phone number is invalid, please use this format 06 12345678.");
+                done();
+            });
         });
 
         it('TC-205-4 user id does not exist /api/user/5',(done) => {
             chai
             .request(server)
             .put('/api/user/5')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+            )
             .send({
                 firstName: "Rik",
                 lastName: "Vandermullen",
@@ -459,14 +471,37 @@ describe('Manage users',() => {
         });
 
         it('TC-205-5 user is not logged in /api/user/1',(done) => {
-            // not yet implemented
-            done();
+            chai
+            .request(server)
+            .put('/api/user/1')
+            .send({
+                firstName: "Rik",
+                lastName: "Vandermullen",
+                street: "Kromme Slagen 3",
+                isActive: 1,
+                // Changed Breda to Amsterdam.
+                city: "Amsterdam",
+                emailAdress: "rik@server.com",
+                password: "Secrets0",
+                phoneNumber: "06 12345678"
+            })
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, message} = res.body;
+                status.should.equals(401);
+                message.should.be.an('string').that.equals("Authorization header missing!");
+                done();
+            });
         });
 
         it('TC-205-6 User information has been updated /api/user/1',(done) => {
             chai
             .request(server)
             .put('/api/user/1')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+            )
             .send({
                 firstName: "Rik",
                 lastName: "Vandermullen",
@@ -523,6 +558,10 @@ describe('Manage users',() => {
             chai
             .request(server)
             .delete('/api/user/5')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+            )
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, message} = res.body;
@@ -533,8 +572,17 @@ describe('Manage users',() => {
         });
 
         it('TC-206-2 User is not logged in /api/user/1',(done) => {
-            // not implemented yet.
-            done();
+            chai
+            .request(server)
+            .delete('/api/user/1')
+
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, message} = res.body;
+                status.should.equals(401);
+                message.should.be.an('string').that.equals("Authorization header missing!");
+                done();
+            });
         });
 
         it('TC-206-3 User is not an owner /api/user/1',(done) => {
@@ -546,6 +594,10 @@ describe('Manage users',() => {
             chai
             .request(server)
             .delete('/api/user/2')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+            )
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, message} = res.body;

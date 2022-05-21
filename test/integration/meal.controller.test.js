@@ -466,7 +466,7 @@ describe('Manage meals',() => {
         });
     })
 
-    describe('UC-304 Retrieve a meals based on mealId parameter /api/meal/:mealId',() => {
+    describe('UC-305 Delete a meals based on mealId parameter /api/meal/:mealId',() => {
         beforeEach((done) => {
             logger.debug('beforeEach called');
             dbconnection.getConnection(function (err, connection) {
@@ -500,7 +500,7 @@ describe('Manage meals',() => {
             });
         });
 
-        it('TC-304-1 Deleting a meal when logged in user is not the owner',(done) => {
+        it('TC-304-2 Deleting a meal when logged in user is not the owner',(done) => {
             chai
             .request(server)
             .delete('/api/meal/2')
@@ -517,7 +517,7 @@ describe('Manage meals',() => {
             });
         });
 
-        it('TC-304-1 Deleting a meal that does not exist',(done) => {
+        it('TC-304-3 Deleting a meal that does not exist',(done) => {
             chai
             .request(server)
             .delete('/api/meal/3')
@@ -534,7 +534,7 @@ describe('Manage meals',() => {
             });
         });
 
-        it('TC-304-1 Deleting a meal succesfully',(done) => {
+        it('TC-304-4 Deleting a meal succesfully',(done) => {
             chai
             .request(server)
             .delete('/api/meal/2')
