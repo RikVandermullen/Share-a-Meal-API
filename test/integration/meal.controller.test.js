@@ -147,7 +147,7 @@ describe('Manage meals',() => {
                 isVega : 0,
                 isVegan : 0,
                 isToTakeHome : 1,
-                datetime : "2022-03-20 12:01:05",
+                datetime : "2022-03-20T12:01:05.000Z",
                 imageUrl : "https://google.com/meal",
                 allergenes : ["noten"],
                 maxAmountOfParticipants : 1,
@@ -166,13 +166,13 @@ describe('Manage meals',() => {
                     description : "this is a test meal",
                     id: 3,
                     imageUrl : "https://google.com/meal",
-                    isActive : 1,
-                    isToTakeHome : 1,
-                    isVega : 0,
-                    isVegan : 0,
+                    isActive : true,
+                    isToTakeHome : true,
+                    isVega : false,
+                    isVegan : false,
                     maxAmountOfParticipants : 1,
                     name : "Test Meal",
-                    price : "15.99",
+                    price : 15.99,
                     updateDate: result.updateDate
                 }
                 assert.deepEqual(result,expected);

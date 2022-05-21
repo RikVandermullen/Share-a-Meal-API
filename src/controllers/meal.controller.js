@@ -34,18 +34,14 @@ let controller = {
         let meal = req.body;
         const cookId = req.userId;
         let allergenes = meal.allergenes.join();
-
-        if (!meal.dateTime) {
-            meal.dateTime = "NOW()"
-        }
-        console.log(meal)
+        let price = parseFloat(meal.price);
 
         logger.debug(meal);
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
 
             // adds new meal
-            connection.query('INSERT INTO meal (datetime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, isActive, isVega, isVegan, isToTakeHome, allergenes) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', [meal.datetime, meal.maxAmountOfParticipants, meal.price, meal.imageUrl, cookId, meal.name, meal.description, meal.isActive, meal.isVega, meal.isVegan, meal.isToTakeHome, allergenes], function (error, results, fields) {
+            connection.query(`INSERT INTO meal (datetime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, isActive, isVega, isVegan, isToTakeHome, allergenes) VALUES(STR_TO_DATE(?, '%Y-%m-%dT%H:%i:%s.%fZ'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, [meal.datetime, meal.maxAmountOfParticipants, meal.price, meal.imageUrl, cookId, meal.name, meal.description, meal.isActive, meal.isVega, meal.isVegan, meal.isToTakeHome, allergenes], function (error, results, fields) {
                 if (error) {
                     logger.debug(error)
                     connection.release();
@@ -59,6 +55,13 @@ let controller = {
                     connection.query('SELECT * FROM meal ORDER BY id DESC LIMIT 1;', function (error, results, fields) {
                         connection.release();
                         if (error) throw error;
+
+                        results[0].price = price;
+                        results[0].isActive = meal.isActive ? true : false;
+                        results[0].isVega = meal.isVega ? true : false;
+                        results[0].isVegan = meal.isVegan ? true : false;
+                        results[0].isToTakeHome = meal.isToTakeHome ? true : false;
+
                         res.status(201).json({
                             status: 201,
                             result: results[0],
@@ -97,7 +100,13 @@ let controller = {
                 if (error) throw error;
 
                 logger.debug('#results = ',results.length);
+
                 if (results.length > 0) {
+                    results[0].isActive = results[0].isActive ? true : false;
+                    results[0].isVega = results[0].isVega ? true : false;
+                    results[0].isVegan = results[0].isVegan ? true : false;
+                    results[0].isToTakeHome = results[0].isToTakeHome ? true : false;
+                    
                     res.status(200).json({
                         status: 200,
                         result: results[0],
@@ -137,6 +146,12 @@ let controller = {
                         connection.query('SELECT * FROM meal WHERE id = ?;',[mealId], function (error, results, fields) {
                             connection.release();
                             if (error) throw error;
+
+                            results[0].isActive = newMealInfo.isActive ? true : false;
+                            results[0].isVega = newMealInfo.isVega ? true : false;
+                            results[0].isVegan = newMealInfo.isVegan ? true : false;
+                            results[0].isToTakeHome = newMealInfo.isToTakeHome ? true : false;
+
                             res.status(200).json({
                                 status: 200,
                                 result: results[0],

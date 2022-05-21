@@ -182,6 +182,7 @@ let controller = {
                 connection.release();
                 if (error) throw error;
                 logger.debug('results: ', results.length);
+                console.log(results)
                 if (results.length < 1) {
                     next();
                 } else {
