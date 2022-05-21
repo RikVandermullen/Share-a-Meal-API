@@ -23,7 +23,7 @@ let controller = {
             assert.match(password, /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, 'This password is not valid, please use at least 8 characters, one digit, one lower case and one upper case.')
             
             // 2 digits, 1 white space, 8 digits
-            assert.match(phoneNumber, /^\(?(0)-?6(\s)([0-9]\s{0,3}){8}$/, "This phone number is invalid, please use this format 06 12345678.")
+            assert.match(phoneNumber, /(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/, "This phone number is invalid, please use this format 06 12345678.")
 
             next();
         } catch (err) {
