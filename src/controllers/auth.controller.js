@@ -45,6 +45,8 @@ let controller = {
                                 const payload = {
                                     userId: userinfo.id,
                                 }
+                                // sets isActive on true or false based on 0 or 1
+                                userinfo.isActive = userinfo.isActive ? true : false;
 
                                 jwt.sign(
                                     payload,

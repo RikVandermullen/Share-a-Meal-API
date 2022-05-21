@@ -71,12 +71,6 @@ let controller = {
         let query = req.query;
         let {active, name} = query;
 
-        // if (active == "false") {
-        //     active = 0;
-        // } else if (active == "true") {
-        //     active = 1;
-        // }
-
         let sqlQuery = 'SELECT * FROM user;';
         if (active != undefined && name != undefined) {
             sqlQuery = `SELECT * FROM user WHERE isActive = ${active} AND firstName = '${name}';`;
@@ -128,7 +122,7 @@ let controller = {
                             if (error) throw error;
                             res.status(200).json({
                                 status: 200,
-                                message: results,
+                                result: results,
                             });
                             
                         })
