@@ -72,7 +72,7 @@ Make sure the .env file is updated with your own values.
 All requests for user CRUD.
 
 #### Register
-```
+```javascript
 Route: /api/user
 Request: POST
 Body:
@@ -87,7 +87,7 @@ Body:
 ```
 
 #### Login
-```
+```javascript
 Route: /api/auth/login
 Request: POST
 Body:
@@ -96,31 +96,33 @@ Body:
 ```
 
 #### Get all
-```
+```javascript
 // must be logged in
 Route: /api/user
 Request: GET
 ```
 
 #### Get by id
-```
+```javascript
 // must be logged in
 Route: /api/user/:id
 Request: GET
+Parameter: userId
 ```
 
 #### Get user profile
-```
+```javascript
 // must be logged in
 Route: /api/user/profile
 Request: GET
 ```
 
 #### Update user information
-```
+```javascript
 // must be logged in
 Route: /api/user/:id
 Request: PUT
+Parameter: userId
 Body:
     firstName: string,
     lastName: string,
@@ -133,17 +135,18 @@ Body:
 ```
 
 #### Delete user
-```
+```javascript
 // must be logged in
 Route: /api/user/:id
 Request: DELETE
+Parameter: userId
 ```
 
 ### Meal
 All requests for meal CRUD
 
 #### Register
-```
+```javascript
 Route: /api/meal
 Request: POST
 Body:
@@ -161,24 +164,26 @@ Body:
 ```
 
 #### Get all
-```
+```javascript
 // must be logged in
 Route: /api/meal
 Request: GET
 ```
 
 #### Get by id
-```
+```javascript
 // must be logged in
 Route: /api/meal/:id
 Request: GET
+Parameter: mealId
 ```
 
 #### Update
-```
+```javascript
 // must be logged in
 Route: /api/meal/:id
 Request: PUT
+Parameter: mealId
 Body:
     name: string,
     description : string,
@@ -188,23 +193,25 @@ Body:
     isToTakeHome : boolean,
     dateTime: datetime,
     imageUrl : string,
-    allergenes : array of string,
+    allergenes : string array,
     maxAmountOfParticipants : number,
     price : decimal
 ```
 
 #### Delete
-```
+```javascript
 // must be logged in
 Route: /api/meal/:id
 Request: DELETE
+Parameter: mealId
 ```
 
 #### Add participation
-```
+```javascript
 // must be logged in
 Route: /api/meal/:id/participate
 Request: GET
+Parameter: mealId
 ```
 
 ## About me
