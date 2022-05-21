@@ -17,7 +17,7 @@ router.post("/api/user", userController.validateUser, userController.addUser);
 router.get("/api/user/profile", authController.validateToken, userController.getUserProfile);
   
 //Retrieves User info based on id paramater
-router.get("/api/user/:userId", userController.getUserById);
+router.get("/api/user/:userId", authController.validateToken, userController.getUserById);
   
 //Updates User info based on id paramater
 router.put("/api/user/:userId", authController.validateToken, userController.validateUser ,userController.updateUser);
@@ -26,6 +26,6 @@ router.put("/api/user/:userId", authController.validateToken, userController.val
 router.delete("/api/user/:userId", authController.validateToken, authController.validateUserOwner, userController.deleteUser);
   
 //Retrieves all Users info
-router.get("/api/user", userController.getAllUsers);
+router.get("/api/user", authController.validateToken, userController.getAllUsers);
 
 module.exports = router;
