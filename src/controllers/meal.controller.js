@@ -5,7 +5,7 @@ const logger = require('../config/config').logger
 let controller = {
     validateMeal: (req, res, next) => {
         let meal = req.body;
-        let {name, description, imageUrl, maxAmountOfParticipants, price} = meal;
+        let {name, description, imageUrl, maxAmountOfParticipants, price, isActive, isVega, isVegan, isToTakeHome, datetime} = meal;
         
         // validates meal attributes
         try {
@@ -13,7 +13,12 @@ let controller = {
             assert(typeof description === 'string', 'Description must be a string');
             assert(typeof imageUrl === 'string', 'Image URL must be a string');
             assert(typeof maxAmountOfParticipants === 'number', 'maxAmountofParticipants must be a number');
+            assert(typeof datetime === 'string', 'Datetime must be a string');
             assert(typeof price === 'number', 'Price must be a string');
+            assert(typeof isActive === 'number', 'isActive must be a number');
+            assert(typeof isVega === 'number', 'isVega must be a number');
+            assert(typeof isVegan === 'number', 'isVegan must be a number');
+            assert(typeof isToTakeHome === 'number', 'isToTakeHome must be a number');
 
             next();
         } catch (err) {
