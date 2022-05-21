@@ -150,10 +150,10 @@ let controller = {
                             if (error) throw error;
                             
                             results[0].price = price
-                            results[0].isActive = newMealInfo.isActive ? true : false;
-                            results[0].isVega = newMealInfo.isVega ? true : false;
-                            results[0].isVegan = newMealInfo.isVegan ? true : false;
-                            results[0].isToTakeHome = newMealInfo.isToTakeHome ? true : false;
+                            results[0].isActive = results[0].isActive ? true : false;
+                            results[0].isVega = results[0].isVega ? true : false;
+                            results[0].isVegan = results[0].isVegan ? true : false;
+                            results[0].isToTakeHome = results[0].isToTakeHome ? true : false;
 
                             res.status(200).json({
                                 status: 200,
