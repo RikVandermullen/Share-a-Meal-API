@@ -551,4 +551,152 @@ describe('Manage meals',() => {
             });
         });
     })
+
+    describe('UC-401 Participate for a meal /api/meal/:mealId/participate',() => {
+        beforeEach((done) => {
+            logger.debug('beforeEach called');
+            dbconnection.getConnection(function (err, connection) {
+                if (err) throw err // not connected!
+                connection.query(CLEAR_MEAL_TABLE, function (error, messages, fields) {
+                    // resets auto increment to 1
+                    connection.query('ALTER TABLE meal AUTO_INCREMENT = 1;', (error, message, field) => {
+                        connection.query(INSERT_USER, (error, message, field) => {
+                            connection.query(INSERT_MEALS, (error, message, field) => {
+                                connection.release()
+                                if (error) throw error;
+                                logger.debug('beforeEach done');
+                                done();
+                            })
+                        })
+                    })
+                })
+            })
+        });
+
+        it('TC-401-1 User not logged in, a valid error is returned',(done) => {
+            chai
+            .request(server)
+            .get('/api/meal/1/participate')
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, message} = res.body;
+                status.should.equals(401);
+                message.should.be.an('string').that.equals('Authorization header missing!');
+                done();
+            });
+        });
+
+        it('TC-401-2 When a meal does not exist, a valid error is returned',(done) => {
+            chai
+            .request(server)
+            .get('/api/meal/99/participate')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+            )
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, message} = res.body;
+                status.should.equals(404);
+                message.should.be.an('string').that.equals('Meal: 99 does not exist.');
+                done();
+            });
+        });
+
+        it('TC-401-3 A user is participating a meal succesfully',(done) => {
+            chai
+            .request(server)
+            .get('/api/meal/1/participate')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+            )
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, result} = res.body;
+                status.should.equals(200);
+                let expected = {
+                    currentlyParticipating: true,
+                    currentAmountOfParticipants: 1
+                }
+                assert.deepEqual(result,expected);
+                done();
+            });
+        });
+    })
+
+    describe('UC-402 Unparticipate for a meal /api/meal/:mealId/participate',() => {
+        beforeEach((done) => {
+            logger.debug('beforeEach called');
+            dbconnection.getConnection(function (err, connection) {
+                if (err) throw err // not connected!
+                connection.query(CLEAR_MEAL_TABLE, function (error, messages, fields) {
+                    // resets auto increment to 1
+                    connection.query('ALTER TABLE meal AUTO_INCREMENT = 1;', (error, message, field) => {
+                        connection.query(INSERT_USER, (error, message, field) => {
+                            connection.query(INSERT_MEALS, (error, message, field) => {
+                                connection.query("INSERT INTO meal_participants_user VALUES (1, 1);", (error, message, field) => {
+                                    connection.release()
+                                    if (error) throw error;
+                                    logger.debug('beforeEach done');
+                                    done();  
+                                })                        
+                            })
+                        })
+                    })
+                })
+            })
+        });
+
+        it('TC-402-1 User not logged in, a valid error is returned',(done) => {
+            chai
+            .request(server)
+            .get('/api/meal/1/participate')
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, message} = res.body;
+                status.should.equals(401);
+                message.should.be.an('string').that.equals('Authorization header missing!');
+                done();
+            });
+        });
+
+        it('TC-402-2 When a meal does not exist, a valid error is returned',(done) => {
+            chai
+            .request(server)
+            .get('/api/meal/99/participate')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+            )
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, message} = res.body;
+                status.should.equals(404);
+                message.should.be.an('string').that.equals('Meal: 99 does not exist.');
+                done();
+            });
+        });
+
+        it('TC-402-3 A user is participating a meal succesfully',(done) => {
+            chai
+            .request(server)
+            .get('/api/meal/1/participate')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+            )
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, result} = res.body;
+                status.should.equals(200);
+                let expected = {
+                    currentlyParticipating: false,
+                    currentAmountOfParticipants: 0
+                }
+                assert.deepEqual(result,expected);
+                done();
+            });
+        });
+    })
 })

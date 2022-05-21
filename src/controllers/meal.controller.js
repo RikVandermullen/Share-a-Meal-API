@@ -246,6 +246,7 @@ let controller = {
                                 next(error);
                             }
                         } else {
+                            // if user is already participating
                             logger.debug("Removing participation");
                             connection.query('DELETE FROM meal_participants_user WHERE mealId = ? AND userId = ?;',[mealId, userId], function(error, results, fields) {
                                 if (error) throw error;
