@@ -47,7 +47,7 @@ npm install
 ```
 To run the application locally, startup MySQL in [XAMPP](https://www.apachefriends.org/index.html). 
 ```javascript
-// to run to application locally
+// to run the application locally
 npm start
 ```
 
@@ -218,6 +218,6 @@ Parameter: mealId
 
 My name is Rik Vandermullen, 23 years old and currently studying Computer Science at Avans University of Applied Sciences.
 
-[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](rik.vandermullen@gmail.com)
+<a href = "mailto: rik.vandermullen@gmail.com">[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](rik.vandermullen@gmail.com)</a>
 [![Github](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/RikVandermullen)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](-)
