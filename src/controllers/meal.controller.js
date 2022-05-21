@@ -5,7 +5,7 @@ const logger = require('../config/config').logger
 let controller = {
     validateMeal: (req, res, next) => {
         let meal = req.body;
-        let {name, description, imageUrl, maxAmountOfParticipants, price, isActive, isVega, isVegan, isToTakeHome, datetime} = meal;
+        let {name, description, imageUrl, maxAmountOfParticipants, price, isActive, isVega, isVegan, isToTakeHome} = meal;
 
         // validates meal attributes
         try {
@@ -14,10 +14,10 @@ let controller = {
             assert(typeof imageUrl === 'string', 'Image URL must be a string');
             assert(typeof maxAmountOfParticipants === 'number', 'maxAmountofParticipants must be a number');
             assert(typeof price === 'number', 'Price must be a string');
-            // assert(isActive !== undefined, 'isActive must be a number');
-            // assert(isVega !== undefined, 'isVega must be a number');
-            // assert(isVegan !== undefined, 'isVegan must be a number');
-            // assert(isToTakeHome !== undefined, 'isToTakeHome must be a number');
+            assert(isActive !== null, 'isActive must be a number');
+            assert(isVega !== null, 'isVega must be a number');
+            assert(isVegan !== null, 'isVegan must be a number');
+            assert(isToTakeHome !== null, 'isToTakeHome must be a number');
 
             next();
         } catch (err) {
@@ -40,7 +40,7 @@ let controller = {
             if (err) throw err; // not connected!
 
             // adds new meal
-            connection.query(`INSERT INTO meal (datetime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, isActive, isVega, isVegan, isToTakeHome, allergenes) VALUES(STR_TO_DATE(?, '%Y-%m-%dT%H:%i:%s.%fZ'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, [meal.datetime, meal.maxAmountOfParticipants, meal.price, meal.imageUrl, cookId, meal.name, meal.description, meal.isActive, meal.isVega, meal.isVegan, meal.isToTakeHome, allergenes], function (error, results, fields) {
+            connection.query(`INSERT INTO meal (dateTime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, isActive, isVega, isVegan, isToTakeHome, allergenes) VALUES(STR_TO_DATE(?, '%Y-%m-%dT%H:%i:%s.%fZ'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, [meal.datetime, meal.maxAmountOfParticipants, meal.price, meal.imageUrl, cookId, meal.name, meal.description, meal.isActive, meal.isVega, meal.isVegan, meal.isToTakeHome, allergenes], function (error, results, fields) {
                 if (error) {
                     logger.debug(error)
                     connection.release();
@@ -101,6 +101,7 @@ let controller = {
                 logger.debug('#results = ',results.length);
 
                 if (results.length > 0) {
+                    results[0].price = parseFloat(results[0].price)
                     results[0].isActive = results[0].isActive ? true : false;
                     results[0].isVega = results[0].isVega ? true : false;
                     results[0].isVegan = results[0].isVegan ? true : false;
@@ -123,12 +124,13 @@ let controller = {
     updateMeal: (req, res, next) => {
         const mealId = req.params.mealId;
         const newMealInfo = req.body;
+        let price = parseFloat(newMealInfo.price)
         
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
 
             // updates a meal based on id parameter
-            connection.query('UPDATE meal SET name = ?, description = ?, isActive = ?, isVega = ?, isVegan = ?, isToTakeHome = ?, datetime = ?, imageUrl = ?, allergenes = ?, maxAmountOfParticipants = ?, price = ? WHERE id = ?;', [newMealInfo.name, newMealInfo.description, newMealInfo.isActive, newMealInfo.isVega, newMealInfo.isVegan, newMealInfo.isToTakeHome, newMealInfo.datetime, newMealInfo.imageUrl, newMealInfo.allergenes, newMealInfo.maxAmountOfParticipants, newMealInfo.price, mealId], function (error, results, fields) {
+            connection.query('UPDATE meal SET name = ?, description = ?, isActive = ?, isVega = ?, isVegan = ?, isToTakeHome = ?, dateTime = ?, imageUrl = ?, allergenes = ?, maxAmountOfParticipants = ?, price = ? WHERE id = ?;', [newMealInfo.name, newMealInfo.description, newMealInfo.isActive, newMealInfo.isVega, newMealInfo.isVegan, newMealInfo.isToTakeHome, newMealInfo.datetime, newMealInfo.imageUrl, newMealInfo.allergenes, newMealInfo.maxAmountOfParticipants, newMealInfo.price, mealId], function (error, results, fields) {
                 if (error) {
                     connection.release();
                     const newError = {
@@ -145,7 +147,8 @@ let controller = {
                         connection.query('SELECT * FROM meal WHERE id = ?;',[mealId], function (error, results, fields) {
                             connection.release();
                             if (error) throw error;
-
+                            
+                            results[0].price = price
                             results[0].isActive = newMealInfo.isActive ? true : false;
                             results[0].isVega = newMealInfo.isVega ? true : false;
                             results[0].isVegan = newMealInfo.isVegan ? true : false;
