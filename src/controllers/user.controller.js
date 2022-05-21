@@ -69,15 +69,15 @@ let controller = {
     },
     getAllUsers: (req, res) => {
         let query = req.query;
-        let {active, name} = query;
+        let {isActive, firstName} = query;
 
         let sqlQuery = 'SELECT * FROM user;';
-        if (active != undefined && name != undefined) {
-            sqlQuery = `SELECT * FROM user WHERE isActive = ${active} AND firstName = '${name}';`;
-        } else if (active != undefined && name == undefined) {
-            sqlQuery = `SELECT * FROM user WHERE isActive = ${active};`;
-        } else if (active == undefined && name != undefined) {
-            sqlQuery = `SELECT * FROM user WHERE firstName = '${name}';`;
+        if (isActive != undefined && firstName != undefined) {
+            sqlQuery = `SELECT * FROM user WHERE isActive = ${isActive} AND firstName = '${firstName}';`;
+        } else if (isActive != undefined && firstName == undefined) {
+            sqlQuery = `SELECT * FROM user WHERE isActive = ${isActive};`;
+        } else if (isActive == undefined && firstName != undefined) {
+            sqlQuery = `SELECT * FROM user WHERE firstName = '${firstName}';`;
         }
 
         dbconnection.getConnection(function(err, connection) {
