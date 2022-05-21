@@ -178,7 +178,7 @@ let controller = {
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
 
-            connection.query('SELECT id FROM user WHERE id = ?;', [loggedInUserId], function (error, results, fields) {
+            connection.query('SELECT id FROM user WHERE id = ?;', [userId], function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
                 logger.debug('results: ', results.length);
