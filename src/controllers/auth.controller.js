@@ -168,6 +168,34 @@ let controller = {
                 }
             })
         })
+    },
+    validateUserOwner(req, res, next) {
+        const userId = req.params.userId;
+        const loggedInUserId = req.userId;
+        
+        dbconnection.getConnection(function(err, connection) {
+            if (err) throw err; // not connected!
+
+            connection.query('SELECT id FROM user WHERE id = ?;', [loggedInUserId], function (error, results, fields) {
+                connection.release();
+                if (error) throw error;
+
+                logger.debug('results: ', results.length);
+                if (results.length < 1) {
+                    next();
+                } else {
+                    if (userId != loggedInUserId) {
+                        const newError = {
+                            status: 403,
+                            message: `User: ${loggedInUserId} is not the owner`
+                        }
+                        next(newError);
+                    } else {
+                        next();
+                    }
+                }
+            })
+        })
     }
 }
 

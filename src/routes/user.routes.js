@@ -23,7 +23,7 @@ router.get("/api/user/:userId", userController.getUserById);
 router.put("/api/user/:userId", authController.validateToken, userController.validateUser ,userController.updateUser);
   
 //Deletes User based on id paramater
-router.delete("/api/user/:userId", authController.validateToken, userController.deleteUser);
+router.delete("/api/user/:userId", authController.validateToken, authController.validateUserOwner, userController.deleteUser);
   
 //Retrieves all Users info
 router.get("/api/user", userController.getAllUsers);

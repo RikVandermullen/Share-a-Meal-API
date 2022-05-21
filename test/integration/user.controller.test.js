@@ -560,7 +560,7 @@ describe('Manage users',() => {
             .delete('/api/user/5')
             .set(
                 'authorization',
-                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+                'Bearer ' + jwt.sign({ userId: 5 }, process.env.JWT_SECRET)
             )
             .end((err, res) => {
                 res.should.be.an('object');
@@ -575,7 +575,6 @@ describe('Manage users',() => {
             chai
             .request(server)
             .delete('/api/user/1')
-
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, message} = res.body;
@@ -586,8 +585,20 @@ describe('Manage users',() => {
         });
 
         it('TC-206-3 User is not an owner /api/user/1',(done) => {
-            // not implemented yet.
-            done();
+            chai
+            .request(server)
+            .delete('/api/user/1')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
+            )
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, message} = res.body;
+                status.should.equals(403);
+                message.should.be.an('string').that.equals("User: 2 is not the owner");
+                done();
+            });
         });
 
         it('TC-206-4 User has been deleted /api/user/2',(done) => {
@@ -596,7 +607,7 @@ describe('Manage users',() => {
             .delete('/api/user/2')
             .set(
                 'authorization',
-                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+                'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
             )
             .end((err, res) => {
                 res.should.be.an('object');
