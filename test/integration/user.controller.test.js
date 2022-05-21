@@ -611,7 +611,7 @@ describe('Manage users',() => {
                 res.should.be.an('object');
                 let {status, result} = res.body;
                 status.should.equals(200);
-                let expected = [{
+                let expected = {
                     id: 1,
                     firstName: "Rik",
                     lastName: "Vandermullen",
@@ -622,7 +622,7 @@ describe('Manage users',() => {
                     roles: 'editor,guest',
                     street: "Kromme Slagen 3",
                     city: "Amsterdam"
-                }]
+                }
                 assert.deepEqual(result,expected);
                 done();
             });

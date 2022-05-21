@@ -122,7 +122,7 @@ let controller = {
                             if (error) throw error;
                             res.status(200).json({
                                 status: 200,
-                                result: results,
+                                result: results[0],
                             });
                             
                         })
