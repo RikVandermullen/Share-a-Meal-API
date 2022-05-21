@@ -177,7 +177,7 @@ let controller = {
                 if (error) throw error;
 
                 for (let i = 0; i < results.length; i++) {
-                    results[i].isActive = results[i].isActive ? true : false;
+                    results[i].isActive = (results[i].isActive) ? true : false;
                 }
 
                 logger.debug('#results = ',results.length);
