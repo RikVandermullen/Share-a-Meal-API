@@ -15,10 +15,10 @@ let controller = {
             assert(typeof maxAmountOfParticipants === 'number', 'maxAmountofParticipants must be a number');
             assert(typeof datetime === 'string', 'Datetime must be a string');
             assert(typeof price === 'number', 'Price must be a string');
-            assert(typeof isActive === 'number', 'isActive must be a number');
-            assert(typeof isVega === 'number', 'isVega must be a number');
-            assert(typeof isVegan === 'number', 'isVegan must be a number');
-            assert(typeof isToTakeHome === 'number', 'isToTakeHome must be a number');
+            // assert(typeof isActive === 'number', 'isActive must be a number');
+            // assert(typeof isVega === 'number', 'isVega must be a number');
+            // assert(typeof isVegan === 'number', 'isVegan must be a number');
+            // assert(typeof isToTakeHome === 'number', 'isToTakeHome must be a number');
 
             next();
         } catch (err) {
