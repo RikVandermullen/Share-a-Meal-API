@@ -13,12 +13,12 @@ let controller = {
             assert(typeof description === 'string', 'Description must be a string');
             assert(typeof imageUrl === 'string', 'Image URL must be a string');
             assert(typeof maxAmountOfParticipants === 'number', 'maxAmountofParticipants must be a number');
-            assert(typeof datetime !== 'null', 'Datetime must be a string');
+            assert(datetime !== null, 'Datetime must be a string');
             assert(typeof price === 'number', 'Price must be a string');
-            assert(typeof isActive !== 'null', 'isActive must be a number');
-            assert(typeof isVega !== 'null', 'isVega must be a number');
-            assert(typeof isVegan !== 'null', 'isVegan must be a number');
-            assert(typeof isToTakeHome !== 'null', 'isToTakeHome must be a number');
+            assert(isActive !== null, 'isActive must be a number');
+            assert(isVega !== null, 'isVega must be a number');
+            assert(isVegan !== null, 'isVegan must be a number');
+            assert(isToTakeHome !== null, 'isToTakeHome must be a number');
 
             next();
         } catch (err) {
@@ -34,6 +34,10 @@ let controller = {
         let meal = req.body;
         const cookId = req.userId;
         let allergenes = meal.allergenes.join();
+
+        if (!meal.dateTime) {
+            meal.dateTime = "CURRENT_TIMESTAMP"
+        }
 
         logger.debug(meal);
         dbconnection.getConnection(function(err, connection) {
