@@ -6,19 +6,19 @@ let controller = {
     validateMeal: (req, res, next) => {
         let meal = req.body;
         let {name, description, imageUrl, maxAmountOfParticipants, price, isActive, isVega, isVegan, isToTakeHome, datetime} = meal;
-        
+
         // validates meal attributes
         try {
             assert(typeof name === 'string', 'Name must be a string');
             assert(typeof description === 'string', 'Description must be a string');
             assert(typeof imageUrl === 'string', 'Image URL must be a string');
             assert(typeof maxAmountOfParticipants === 'number', 'maxAmountofParticipants must be a number');
-            assert(datetime !== null, 'Datetime must be a string');
+            assert(datetime !== undefined, 'Datetime must be a string');
             assert(typeof price === 'number', 'Price must be a string');
-            assert(isActive !== null, 'isActive must be a number');
-            assert(isVega !== null, 'isVega must be a number');
-            assert(isVegan !== null, 'isVegan must be a number');
-            assert(isToTakeHome !== null, 'isToTakeHome must be a number');
+            assert(isActive !== undefined, 'isActive must be a number');
+            assert(isVega !== undefined, 'isVega must be a number');
+            assert(isVegan !== undefined, 'isVegan must be a number');
+            assert(isToTakeHome !== undefined, 'isToTakeHome must be a number');
 
             next();
         } catch (err) {
@@ -36,8 +36,9 @@ let controller = {
         let allergenes = meal.allergenes.join();
 
         if (!meal.dateTime) {
-            meal.dateTime = "CURRENT_TIMESTAMP"
+            meal.dateTime = "NOW()"
         }
+        console.log(meal)
 
         logger.debug(meal);
         dbconnection.getConnection(function(err, connection) {
