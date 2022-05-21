@@ -9,7 +9,7 @@
 ![Github Issues](https://img.shields.io/github/issues/RikVandermullen/programmeren-4-shareameal?label=Issues&color=informational)
 
 ## Introduction
-This repository is a API for making joint eating easier. Users can register themselves and offer a meal and other users can participate that meal. The API is made in JavaScript, uses MySQL as a database and is deployed on Heroku. Endpoints that need safety are secured via JWT-authentication ([jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)).
+This repository is a API for making eating together easier. Users can register themselves, offer up a meal and other users can participate that meal. The API is made in JavaScript, uses MySQL as a database and is deployed on Heroku. Endpoints that need safety are secured via JWT-authentication ([jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)).
 
 Link to API: https://rikvandermullen-shareameal.herokuapp.com/
 
@@ -218,6 +218,6 @@ Parameter: mealId
 
 My name is Rik Vandermullen, 23 years old and currently studying Computer Science at Avans University of Applied Sciences.
 
-![rik.vandermullen@gmail.com](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)
-![https://github.com/RikVandermullen](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
-![-](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)
+[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](rik.vandermullen@gmail.com)
+[![Github](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/RikVandermullen)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](-)
