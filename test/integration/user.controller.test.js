@@ -223,6 +223,10 @@ describe('Manage users',() => {
             chai
             .request(server)
             .get('/api/user?active=0')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
+            )
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, message} = res.body;
@@ -237,6 +241,10 @@ describe('Manage users',() => {
             chai
             .request(server)
             .get('/api/user')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
+            )
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, message} = res.body;
@@ -250,6 +258,10 @@ describe('Manage users',() => {
             chai
             .request(server)
             .get('/api/user?name=piet')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
+            )
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, message} = res.body;
@@ -263,6 +275,10 @@ describe('Manage users',() => {
             chai
             .request(server)
             .get('/api/user?active=false')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
+            )
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, message} = res.body;
@@ -277,6 +293,10 @@ describe('Manage users',() => {
             chai
             .request(server)
             .get('/api/user?active=true')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
+            )
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, message} = res.body;
@@ -291,6 +311,10 @@ describe('Manage users',() => {
             chai
             .request(server)
             .get('/api/user?name=Rik')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
+            )
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, message} = res.body;
@@ -392,6 +416,10 @@ describe('Manage users',() => {
             chai
             .request(server)
             .get('/api/user/5')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
+            )
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, message} = res.body;
@@ -405,6 +433,10 @@ describe('Manage users',() => {
             chai
             .request(server)
             .get('/api/user/1')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+            )
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, result} = res.body;
