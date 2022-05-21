@@ -13,7 +13,7 @@ let controller = {
             assert(typeof description === 'string', 'Description must be a string');
             assert(typeof imageUrl === 'string', 'Image URL must be a string');
             assert(typeof maxAmountOfParticipants === 'number', 'maxAmountofParticipants must be a number');
-            assert(typeof datetime === 'string', 'Datetime must be a string');
+            // assert(typeof datetime === 'string', 'Datetime must be a string');
             assert(typeof price === 'number', 'Price must be a string');
             // assert(typeof isActive === 'number', 'isActive must be a number');
             // assert(typeof isVega === 'number', 'isVega must be a number');
