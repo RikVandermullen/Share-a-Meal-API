@@ -25,7 +25,7 @@ let controller = {
                             logger.debug('Error: ', err.toString())
                             const newError = {
                                 status: 404,
-                                message: err.toString()
+                                message: 'User does not exist.'
                             }
                             next(newError);
                         }
@@ -56,8 +56,8 @@ let controller = {
                                             userinfo
                                         )
                                         res.status(200).json({
-                                            statusCode: 200,
-                                            results: { ...userinfo, token },
+                                            status: 200,
+                                            result: { ...userinfo, token },
                                         })
                                     }
                                 )
@@ -66,7 +66,7 @@ let controller = {
                                     'User not found or password invalid'
                                 )
                                 const newError = {
-                                    status: 401,
+                                    status: 404,
                                     message: `User not found or password invalid`
                                 }
                                 next(newError);
@@ -80,8 +80,8 @@ let controller = {
     validateLogin(req, res, next) {
         // Verify that we receive the expected input
         try {
-            assert(typeof req.body.emailAdress === 'string','email must be a string.')
-            assert(typeof req.body.password === 'string','password must be a string.')
+            assert(typeof req.body.emailAdress === 'string','Email adress must be a string.')
+            assert(typeof req.body.password === 'string','Password must be a string.')
 
             // https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
             assert.match(req.body.emailAdress, /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "This email address is not valid, please use a different one.")
@@ -93,7 +93,7 @@ let controller = {
         } catch (ex) {
             const newError = {
                 status: 400,
-                message: ex.toString()
+                message: ex.message
             }
             next(newError);
         }
