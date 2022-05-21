@@ -229,10 +229,10 @@ describe('Manage users',() => {
             )
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, message} = res.body;
+                let {status, result} = res.body;
                 status.should.equals(200);
                 // all users are active so array length should be 0
-                message.should.be.an('array').that.lengthOf(0);
+                result.should.be.an('array').that.lengthOf(0);
                 done();
             });
         });
@@ -247,9 +247,9 @@ describe('Manage users',() => {
             )
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, message} = res.body;
+                let {status, result} = res.body;
                 status.should.equals(200);
-                message.should.be.an('array').that.lengthOf(2);
+                result.should.be.an('array').that.lengthOf(2);
                 done();
             });
         });
@@ -264,9 +264,9 @@ describe('Manage users',() => {
             )
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, message} = res.body;
+                let {status, result} = res.body;
                 status.should.equals(200);
-                message.should.be.an('array').that.lengthOf(0);
+                result.should.be.an('array').that.lengthOf(0);
                 done();
             });
         });
@@ -281,10 +281,10 @@ describe('Manage users',() => {
             )
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, message} = res.body;
+                let {status, result} = res.body;
                 status.should.equals(200);
                 // all users are active so array length should be 0
-                message.should.be.an('array').that.lengthOf(0);
+                result.should.be.an('array').that.lengthOf(0);
                 done();
             });
         });
@@ -299,10 +299,10 @@ describe('Manage users',() => {
             )
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, message} = res.body;
+                let {status, result} = res.body;
                 status.should.equals(200);
                 // all users are active so array length should be 2
-                message.should.be.an('array').that.lengthOf(2);
+                result.should.be.an('array').that.lengthOf(2);
                 done();
             });
         });
@@ -317,10 +317,10 @@ describe('Manage users',() => {
             )
             .end((err, res) => {
                 res.should.be.an('object');
-                let {status, message} = res.body;
+                let {status, result} = res.body;
                 status.should.equals(200);
                 // only 1 user has the first name Rik so array length should be 1
-                message.should.be.an('array').that.lengthOf(1);
+                result.should.be.an('array').that.lengthOf(1);
                 done();
             });
         });

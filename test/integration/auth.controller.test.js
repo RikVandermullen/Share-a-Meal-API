@@ -155,10 +155,15 @@ describe('Manage login',() => {
                 let {status, result} = res.body;
                 status.should.equals(200);
                 let expected = {
+                    city: "Breda",
                     emailAdress : "rik@server.com",
                     firstName: "Rik",
                     id: 1,
+                    isActive: 1,
                     lastName: "Vandermullen",
+                    phoneNumber: "06 12345678",
+                    roles: "editor,guest",
+                    street: "Kromme Slagen 3",
                     token: result.token
                 }
                 assert.deepEqual(result,expected);

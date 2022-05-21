@@ -94,7 +94,7 @@ let controller = {
                 logger.debug('#results = ',results.length);
                 res.status(200).json({
                     status: 200,
-                    message: results,
+                    result: results,
                 });
             });
         });
