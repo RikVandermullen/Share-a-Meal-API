@@ -197,11 +197,32 @@ let controller = {
         });
     },
     getUserProfile: (req, res, next) => {
-        const error = {
-            status: 400,
-            message: "This functionality has not yet been implemented" 
-        }
-        next(error);
+        dbconnection.getConnection(function(err, connection) {
+            const loggedInUserId = req.userId;
+            logger.debug(`User met ID ${loggedInUserId} gezocht`);
+
+            if (err) throw err;
+
+            // retrieves user based on id parameter
+            connection.query('SELECT * FROM user WHERE id = ?;',[loggedInUserId], function (error, results, fields) {
+                connection.release();
+                if (error) throw error;
+
+                logger.debug('#results = ',results.length);
+                if (results.length > 0) {
+                    res.status(200).json({
+                        status: 200,
+                        result: results[0],
+                    });
+                } else {
+                    const error = {
+                        status: 404,
+                        message: `User with ID ${loggedInUserId} not found`,
+                    }
+                    next(error);
+                }
+            });
+        });
     }
 }
 

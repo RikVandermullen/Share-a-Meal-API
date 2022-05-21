@@ -84,10 +84,10 @@ let controller = {
             assert(typeof req.body.password === 'string','password must be a string.')
 
             // https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
-            assert.match(emailAdress, /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "This email address is not valid, please use a different one.")
+            assert.match(req.body.emailAdress, /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "This email address is not valid, please use a different one.")
             
             // at least 8 characters, 1 digit, 1 lower case and 1 upper case
-            assert.match(password, /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, 'This password is not valid, please use at least 8 characters, one digit, one lower case and one upper case.')
+            assert.match(req.body.password, /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, 'This password is not valid, please use at least 8 characters, one digit, one lower case and one upper case.')
             
             next()
         } catch (ex) {
@@ -179,7 +179,6 @@ let controller = {
             connection.query('SELECT id FROM user WHERE id = ?;', [loggedInUserId], function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
-
                 logger.debug('results: ', results.length);
                 if (results.length < 1) {
                     next();

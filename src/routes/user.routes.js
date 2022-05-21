@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
 router.post("/api/user", userController.validateUser, userController.addUser);
   
 //Retrieves User profile (not implemented)
-router.get("/api/user/profile", userController.getUserProfile);
+router.get("/api/user/profile", authController.validateToken, userController.getUserProfile);
   
 //Retrieves User info based on id paramater
 router.get("/api/user/:userId", userController.getUserById);

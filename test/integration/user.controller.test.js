@@ -302,6 +302,68 @@ describe('Manage users',() => {
         });
     });
 
+    describe('UC-203 Retrieve user profile /api/user/profile',() => {
+        beforeEach((done) => {
+            logger.debug('beforeEach called');
+            dbconnection.getConnection(function (err, connection) {
+                if (err) throw err // not connected!
+                connection.query(CLEAR_USERS_TABLE, function (error, messages, fields) {
+                    // resets auto increment to 1
+                    connection.query('ALTER TABLE user AUTO_INCREMENT = 1;', (error, message, field) => {
+                        connection.query(INSERT_USER, (error, message, field) => {
+                            connection.release()
+                            if (error) throw error;
+                            logger.debug('beforeEach done');
+                            done();
+                        })
+                    })
+                })
+            })
+        });
+
+        it('TC-203-1 An invalid token is provided /api/user/profile',(done) => {
+            chai
+            .request(server)
+            .get('/api/user/profile')
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, message} = res.body;
+                status.should.equals(401);
+                message.should.be.an('string').that.equals('Authorization header missing!');
+                done();
+            });
+        });
+
+        it('TC-203-2 An valid token is provided and profile info is returned /api/user/profile',(done) => {
+            chai
+            .request(server)
+            .get('/api/user/profile')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ userId: 1 }, process.env.JWT_SECRET)
+            )
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, result} = res.body;
+                status.should.equals(200);
+                let expected = {
+                    id: 1,
+                    firstName: "Rik",
+                    lastName: "Vandermullen",
+                    isActive: 1, 
+                    emailAdress: "rik@server.com",
+                    password: "Secrets0",
+                    phoneNumber: "06 12345678",
+                    roles: 'editor,guest',
+                    street: "Kromme Slagen 3",
+                    city: "Breda"
+                }
+                assert.deepEqual(result,expected);
+                done();
+            });
+        });
+    });
+
     describe('UC-204 Retrieve user details /api/user/:userId',() => {
         beforeEach((done) => {
             logger.debug('beforeEach called');
