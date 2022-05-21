@@ -219,10 +219,10 @@ describe('Manage users',() => {
             })
         });
 
-        it('TC-202-1 Show zero users /api/user&active=0',(done) => {
+        it('TC-202-1 Show zero users /api/user&isActive=0',(done) => {
             chai
             .request(server)
-            .get('/api/user?active=0')
+            .get('/api/user?isActive=0')
             .set(
                 'authorization',
                 'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
@@ -254,10 +254,10 @@ describe('Manage users',() => {
             });
         });
 
-        it('TC-202-3 Show users with non existing query name /api/user?name=piet',(done) => {
+        it('TC-202-3 Show users with non existing query name /api/user?firstName=piet',(done) => {
             chai
             .request(server)
-            .get('/api/user?name=piet')
+            .get('/api/user?firstName=piet')
             .set(
                 'authorization',
                 'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
@@ -271,10 +271,10 @@ describe('Manage users',() => {
             });
         });
 
-        it('TC-202-4 Show users with query active = false /api/user?active=false',(done) => {
+        it('TC-202-4 Show users with query active = false /api/user?isActive=false',(done) => {
             chai
             .request(server)
-            .get('/api/user?active=false')
+            .get('/api/user?isActive=false')
             .set(
                 'authorization',
                 'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
@@ -289,10 +289,10 @@ describe('Manage users',() => {
             });
         });
 
-        it('TC-202-5 Show users with query active = true /api/user?active=true',(done) => {
+        it('TC-202-5 Show users with query active = true /api/user?isActive=true',(done) => {
             chai
             .request(server)
-            .get('/api/user?active=true')
+            .get('/api/user?isActive=true')
             .set(
                 'authorization',
                 'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
@@ -307,10 +307,10 @@ describe('Manage users',() => {
             });
         });
 
-        it('TC-202-6 Show users with query name = Rik /api/user?name=Rik',(done) => {
+        it('TC-202-6 Show users with query name = Rik /api/user?firstName=Rik',(done) => {
             chai
             .request(server)
-            .get('/api/user?name=Rik')
+            .get('/api/user?firstName=Rik')
             .set(
                 'authorization',
                 'Bearer ' + jwt.sign({ userId: 2 }, process.env.JWT_SECRET)
