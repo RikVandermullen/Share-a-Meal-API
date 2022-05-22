@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const logger = require('../config/config').logger
 
 let controller = {
-    login(req, res, next) {
+    login: (req, res, next) => {
         dbconnection.getConnection((err, connection) => {
             if (err) {
                 logger.debug('Error getting connection from dbconnection')
@@ -15,7 +15,7 @@ let controller = {
                 next(newError);
             }
             if (connection) {
-                // 1. Kijk of deze useraccount bestaat.
+                // checks if user account exists
                 connection.query(
                     'SELECT * FROM `user` WHERE `emailAdress` = ?',
                     [req.body.emailAdress],
@@ -30,7 +30,7 @@ let controller = {
                             next(newError);
                         }
                         if (rows) {
-                            // 2. Er was een resultaat, check het password.
+                            // if user account exists check password is right
                             if (
                                 rows &&
                                 rows.length === 1 &&
@@ -53,10 +53,8 @@ let controller = {
                                     process.env.JWT_SECRET,
                                     { expiresIn: '12d' },
                                     function (err, token) {
-                                        logger.debug(
-                                            'User logged in, sending: ',
-                                            userinfo
-                                        )
+                                        logger.debug('User logged in, sending: ', userinfo);
+
                                         res.status(200).json({
                                             status: 200,
                                             result: { ...userinfo, token },
@@ -64,9 +62,7 @@ let controller = {
                                     }
                                 )
                             } else {
-                                logger.debug(
-                                    'User not found or password invalid'
-                                )
+                                logger.debug('User not found or password invalid')
                                 const newError = {
                                     status: 404,
                                     message: `User not found or password invalid`
@@ -79,7 +75,7 @@ let controller = {
             }
         })
     },
-    validateLogin(req, res, next) {
+    validateLogin: (req, res, next) => {
         // Verify that we receive the expected input
         try {
             assert(typeof req.body.emailAdress === 'string','Email adress must be a string.')
@@ -100,9 +96,9 @@ let controller = {
             next(newError);
         }
     },
-    validateToken(req, res, next) {
+    validateToken: (req, res, next) => {
         logger.debug('validateToken called')
-        // logger.trace(req.headers)
+
         // The headers should contain the authorization-field with value 'Bearer [token]'
         const authHeader = req.headers.authorization
         if (!authHeader) {
@@ -127,15 +123,15 @@ let controller = {
                 }
                 if (payload) {
                     logger.debug('token is valid', payload)
-                    // User heeft toegang. Voeg UserId uit payload toe aan
-                    // request, voor ieder volgend endpoint.
+                    // User has access. Add UserId from payload to request, for every next endpoint.
                     req.userId = payload.userId
                     next()
                 }
             })
         }
     },
-    validateOwner(req, res, next) {
+    validateOwner: (req, res, next) => {
+        // checks if logged in user is the owner of a meal
         const mealId = req.params.mealId;
         const userId = req.userId;
         
@@ -157,8 +153,6 @@ let controller = {
                     cookId = results[0].cookId;
                 }
                 
-                
-                // checks if logged in user is the owner of meal
                 if (userId !== cookId) {
                     const newError = {
                         status: 403,
@@ -171,7 +165,8 @@ let controller = {
             })
         })
     },
-    validateUserOwner(req, res, next) {
+    validateUserOwner: (req, res, next) => {
+        // checks if logged in user is owner of userid in parameter
         const userId = req.params.userId;
         const loggedInUserId = req.userId;
         
@@ -181,8 +176,8 @@ let controller = {
             connection.query('SELECT id FROM user WHERE id = ?;', [userId], function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
-                logger.debug('results: ', results.length);
-                console.log(results)
+                logger.info("Got results: ", results.length);
+
                 if (results.length < 1) {
                     next();
                 } else {

@@ -7,7 +7,7 @@
     "start": "nodemon index.js",
     "test": "mocha test/**/*.test.js --exit"
   },
-  "author": "Robin",
+  "author": "Rik Vandermullen",
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.3.6",

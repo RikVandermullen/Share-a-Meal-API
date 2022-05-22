@@ -14,7 +14,7 @@ const logger = require('./src/config/config').logger
 
 app.all("*", (req, res, next) => {
   const method = req.method;
-  logger.debug(`Method ${method} is aangeroepen`);
+  logger.debug(`Method ${method} is called`);
   next();
 });
 
@@ -36,7 +36,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () => {
-  logger.debug(`Example app listening on port ${port}`);
+  logger.debug(`Share-A-Meal API listening on port: ${port}`);
 });
 
 module.exports = app;

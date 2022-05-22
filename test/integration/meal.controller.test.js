@@ -157,7 +157,7 @@ describe('Manage meals',() => {
                 res.should.be.an('object');
                 let {status, result} = res.body;
                 status.should.equals(201);
-                //createDate and updateDate are token from result body
+                //createDate and updateDate are taken from result body
                 let expected = {
                     allergenes : "noten",
                     cookId: 1,

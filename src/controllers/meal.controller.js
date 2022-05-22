@@ -13,12 +13,14 @@ let controller = {
             assert(typeof description === 'string', 'Description must be a string');
             assert(typeof imageUrl === 'string', 'Image URL must be a string');
             assert(typeof maxAmountOfParticipants === 'number', 'maxAmountofParticipants must be a number');
-            assert(typeof price === 'number', 'Price must be a string');
+            assert(typeof price === 'number', 'Price must be a decimal');
             assert(typeof dateTime === "string", "DateTime must be a string");
-            assert(isToTakeHome != null, "isToTakeHome cannot be null");
+
+            // checking if not null
+            assert(isActive != null, "isActive cannot be null");
             assert(isVega != null, "isVega cannot be null");
             assert(isVegan != null, "isVegan cannot be null");
-            assert(isActive != null, "isActive cannot be null");
+            assert(isToTakeHome != null, "isToTakeHome cannot be null");
 
             next();
         } catch (err) {
@@ -33,7 +35,11 @@ let controller = {
     addMeal: (req, res, next) => {
         let meal = req.body;
         const cookId = req.userId;
+
+        // join allergenens together as 1 array
         let allergenes = meal.allergenes.join();
+
+        // change meal.price into a float
         let price = parseFloat(meal.price);
 
         logger.debug(meal);
@@ -41,6 +47,7 @@ let controller = {
             if (err) throw err; // not connected!
 
             // adds new meal
+            // (STR_TO_DATE(?, '%Y-%m-%dT%H:%i:%s.%fZ') makes sure a correct date is given
             connection.query(`INSERT INTO meal (dateTime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, isActive, isVega, isVegan, isToTakeHome, allergenes) VALUES(STR_TO_DATE(?, '%Y-%m-%dT%H:%i:%s.%fZ'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, [meal.dateTime, meal.maxAmountOfParticipants, meal.price, meal.imageUrl, cookId, meal.name, meal.description, meal.isActive, meal.isVega, meal.isVegan, meal.isToTakeHome, allergenes], function (error, results, fields) {
                 if (error) {
                     logger.debug(error)
@@ -56,6 +63,7 @@ let controller = {
                         connection.release();
                         if (error) throw error;
 
+                        // change attributes for correct response
                         results[0].price = price;
                         results[0].isActive = meal.isActive ? true : false;
                         results[0].isVega = meal.isVega ? true : false;
@@ -79,7 +87,7 @@ let controller = {
             connection.query('SELECT * FROM meal;', function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
-                logger.debug('#results = ',results.length);
+                logger.debug('Total results = ', results.length);
                 res.status(200).json({
                     status: 200,
                     result: results,
@@ -99,9 +107,10 @@ let controller = {
                 connection.release();
                 if (error) throw error;
 
-                logger.debug('#results = ',results.length);
+                logger.debug('#results = ', results.length);
 
                 if (results.length > 0) {
+                    //changes price into a float and other attributes to a boolean
                     results[0].price = parseFloat(results[0].price)
                     results[0].isActive = results[0].isActive ? true : false;
                     results[0].isVega = results[0].isVega ? true : false;
@@ -125,7 +134,12 @@ let controller = {
     updateMeal: (req, res, next) => {
         const mealId = req.params.mealId;
         const newMealInfo = req.body;
+
+        logger.info("Requesting meal update")
+        // changes price into a float
         let price = parseFloat(newMealInfo.price);
+
+        // join allergenens together as 1 array
         let allergenes = req.body.allergenes.join()
         
         dbconnection.getConnection(function(err, connection) {
@@ -135,6 +149,7 @@ let controller = {
             connection.query(`UPDATE meal SET name = ?, description = ?, isActive = ?, isVega = ?, isVegan = ?, isToTakeHome = ?, dateTime = STR_TO_DATE(?, '%Y-%m-%dT%H:%i:%s.%fZ'), imageUrl = ?, allergenes = ?, maxAmountOfParticipants = ?, price = ? WHERE id = ?;`, [newMealInfo.name, newMealInfo.description, newMealInfo.isActive, newMealInfo.isVega, newMealInfo.isVegan, newMealInfo.isToTakeHome, newMealInfo.dateTime, newMealInfo.imageUrl, allergenes, newMealInfo.maxAmountOfParticipants, newMealInfo.price, mealId], function (error, results, fields) {
                 if (error) {
                     connection.release();
+                    logger.info("Meal update has failed")
                     const newError = {
                         status: 404,
                         message: `A meal with id ${mealId} does not exist.`
@@ -144,12 +159,13 @@ let controller = {
                     // checks if a row is affected (updated)
                     if (results.affectedRows > 0) {
                         if (err) throw err; // not connected!
-
+                        logger.info("Meal update was succesfull");
                         // gets meal for the response if a row is changed
                         connection.query('SELECT * FROM meal WHERE id = ?;',[mealId], function (error, results, fields) {
                             connection.release();
                             if (error) throw error;
                             
+                            // changes attributes for a correct response
                             results[0].price = price
                             results[0].isActive = results[0].isActive ? true : false;
                             results[0].isVega = results[0].isVega ? true : false;
@@ -163,6 +179,7 @@ let controller = {
                             
                         })
                     } else {
+                        logger.info("Meal update has failed")
                         const error = {
                             status: 404,
                             message: `Meal with ID ${mealId} not updated because it was not found.`,
@@ -175,7 +192,7 @@ let controller = {
     },
     deleteMeal: (req, res, next) => {
         const mealId = req.params.mealId;
-        
+        logger.debug("Requested meal deletion");
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
 
@@ -186,11 +203,13 @@ let controller = {
                 
                 // checks if a row is affected (deleted)
                 if (results.affectedRows > 0) {
+                    logger.debug("Meal has been deleted!");
                     res.status(200).json({
                         status: 200,
                         message: `Meal with ID ${mealId} is deleted`,
                     });
                 } else {
+                    logger.info("Meal has not been deleted!");
                     const error = {
                         status: 404,
                         message: `Meal does not exist`

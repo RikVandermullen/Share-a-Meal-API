@@ -37,6 +37,7 @@ let controller = {
     },
     addUser: (req, res, next) => {
         let user = req.body;
+        logger.info("Registering new user");
         logger.debug(user);
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
@@ -56,6 +57,8 @@ let controller = {
                     connection.query('SELECT * FROM user ORDER BY id DESC LIMIT 1;', function (error, results, fields) {
                         connection.release();
                         if (error) throw error;
+                        logger.info("New user has been registered");
+
                         // sets isActive on true or false based on 0 or 1
                         results[0].isActive = user.isActive ? true : false;
                         res.status(201).json({
@@ -70,7 +73,9 @@ let controller = {
     getAllUsers: (req, res) => {
         let query = req.query;
         let {isActive, firstName} = query;
+        logger.info("Get all users requested");
 
+        // changes SQL query based on parameters
         let sqlQuery = 'SELECT * FROM user;';
         if (isActive != undefined && firstName != undefined) {
             sqlQuery = `SELECT * FROM user WHERE isActive = ${isActive} AND firstName = '${firstName}';`;
@@ -88,6 +93,7 @@ let controller = {
                 connection.release();
                 if (error) throw error;
 
+                // changing isActive to a boolean for all results
                 for (let i = 0; i < results.length; i++) {
                     results[i].isActive = (results[i].isActive) ? true : false;
                 }
@@ -103,6 +109,7 @@ let controller = {
     updateUser: (req, res, next) => {
         const id = req.params.userId;
         const newUserInfo = req.body;
+        logger.info("An update for an user is requested");
         
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; // not connected!
@@ -211,6 +218,8 @@ let controller = {
 
                 logger.debug('#results = ',results.length);
                 if (results.length > 0) {
+                    // sets isActive on true or false based on 0 or 1
+                    results[0].isActive = results[0].isActive ? true : false;
                     res.status(200).json({
                         status: 200,
                         result: results[0],

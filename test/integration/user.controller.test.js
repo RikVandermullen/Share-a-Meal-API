@@ -349,11 +349,15 @@ describe('Manage users',() => {
             chai
             .request(server)
             .get('/api/user/profile')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ notavalidtoken:2 }, "notasecretkey")
+            )
             .end((err, res) => {
                 res.should.be.an('object');
                 let {status, message} = res.body;
                 status.should.equals(401);
-                message.should.be.an('string').that.equals('Authorization header missing!');
+                message.should.be.an('string').that.equals('Not authorized');
                 done();
             });
         });
@@ -408,8 +412,20 @@ describe('Manage users',() => {
         });
 
         it('TC-204-1 Invalid token is provided /api/user/1',(done) => {
-            // not implemented yet.
-            done();
+            chai
+            .request(server)
+            .get('/api/user/1')
+            .set(
+                'authorization',
+                'Bearer ' + jwt.sign({ notavalidtoken:2 }, "notasecretkey")
+            )
+            .end((err, res) => {
+                res.should.be.an('object');
+                let {status, message} = res.body;
+                status.should.equals(401);
+                message.should.be.an('string').that.equals('Not authorized');
+                done();
+            });
         });
 
         it('TC-204-2 user id does not exist /api/user/5',(done) => {
@@ -505,7 +521,7 @@ describe('Manage users',() => {
         });
 
         it('TC-205-2 An invalid postalCode is provided, a valid error message is returned /api/user/1',(done) => {
-            // not implemented.
+            // does not have to be implemented.
             done();
         });
 
