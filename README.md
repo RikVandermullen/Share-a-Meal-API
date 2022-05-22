@@ -27,6 +27,8 @@ Link to deployed API: https://rikvandermullen-shareameal.herokuapp.com/
 * [Packages](#packages)
 * [Installation](#installation)
 * [Usage](#usage)
+  * [User](#user)
+  * [Meal](#meal)
 * [About me](#about-me)
 
 
