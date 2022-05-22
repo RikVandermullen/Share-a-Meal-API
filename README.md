@@ -6,22 +6,32 @@
 
 [![Deploy to Heroku](https://github.com/RikVandermullen/programmeren-4-shareameal/actions/workflows/main.yml/badge.svg)](https://github.com/RikVandermullen/programmeren-4-shareameal/actions/workflows/main.yml)
 ![Github Language](https://img.shields.io/github/languages/top/RikVandermullen/programmeren-4-shareameal?color=informational)
-![Github Issues](https://img.shields.io/github/issues/RikVandermullen/programmeren-4-shareameal?label=Issues&color=informational)
+[![Github Issues](https://img.shields.io/github/issues/RikVandermullen/programmeren-4-shareameal?label=Issues&color=informational)](https://github.com/RikVandermullen/programmeren-4-shareameal/issues)
 
 ## Introduction
-This repository is a API for making eating together easier. Users can register themselves, offer up a meal and other users can participate that meal. The API is made in JavaScript, uses MySQL as a database and is deployed on Heroku. Endpoints that need safety are secured via JWT-authentication ([jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)).
+This repository is a API for making eating together easier. Users can register themselves, offer up a meal and other users can participate that meal. The API is made with NodeJS, uses MySQL as a database and is deployed on Heroku. Endpoints that need safety are secured via JWT-authentication ([jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)). The code has been thoroughly tested by running local tests, integration tests on Github and making use of an assertion tool: [Ristretto](https://ristretto-assertion-server.herokuapp.com/api/assert/t2) made by Davide Ambesi.
 
-Link to API: https://rikvandermullen-shareameal.herokuapp.com/
+#### Local tests 100%
+![image](https://user-images.githubusercontent.com/94074147/169689246-eab8d633-6d5f-4a04-b882-abc3265cfa34.png)
+
+#### Integration tests on Github 100%
+![image](https://user-images.githubusercontent.com/94074147/169689319-f57ebbc0-9360-4120-b2ca-4a8e4f90abd9.png)
+
+#### Ristretto tests 100%
+![image](https://user-images.githubusercontent.com/94074147/169689441-3a019e5d-ab69-4883-b1f2-f13fd3d3090a.png)
+
+Link to deployed API: https://rikvandermullen-shareameal.herokuapp.com/
 
 ## Table of Contents
 * [Introduction](#introduction)
 * [Packages](#packages)
 * [Installation](#installation)
 * [Usage](#usage)
+* [About me](#about-me)
 
 
 ## Packages
-There were multiple packages used for creating this API which are listed below.
+There were multiple packages used for creating this API which are listed below ⬇️
 
 #### Packages used for production:
 - [ExpressJS](https://expressjs.com/)
@@ -42,10 +52,12 @@ There were multiple packages used for creating this API which are listed below.
 Download the code as a zip-file or fork/clone this project.
 
 ```javascript
-// install npm packages
+// install npm packages (you need this to run the application)
 npm install
 ```
-To run the application locally, startup MySQL in [XAMPP](https://www.apachefriends.org/index.html). 
+To run the application locally, startup MySQL in [XAMPP](https://www.apachefriends.org/index.html).
+Requests can be send by using [Postman](https://www.postman.com/).
+
 ```javascript
 // to run the application locally
 npm start
@@ -66,7 +78,7 @@ Make sure the .env file is updated with your own values.
 - ![Github Tests](https://img.shields.io/badge/Tests-100%25%20passed%2C%200%25%20failed-blue)
 
 ## Usage
-
+There are a lot of routes which take different body's or parameters so they are listed below ⬇️
 
 ### User
 All requests for user CRUD.
@@ -100,12 +112,13 @@ Body:
 // must be logged in
 Route: /api/user
 Request: GET
+Parameters: {isActive} & {firstName}
 ```
 
 #### Get by id
 ```javascript
 // must be logged in
-Route: /api/user/:id
+Route: /api/user/:userId
 Request: GET
 Parameter: userId
 ```
@@ -120,7 +133,7 @@ Request: GET
 #### Update user information
 ```javascript
 // must be logged in
-Route: /api/user/:id
+Route: /api/user/:userId
 Request: PUT
 Parameter: userId
 Body:
@@ -137,13 +150,13 @@ Body:
 #### Delete user
 ```javascript
 // must be logged in
-Route: /api/user/:id
+Route: /api/user/:userId
 Request: DELETE
 Parameter: userId
 ```
 
 ### Meal
-All requests for meal CRUD
+All requests for meal CRUD.
 
 #### Register
 ```javascript
@@ -158,7 +171,7 @@ Body:
     isToTakeHome : boolean,
     dateTime: datetime,
     imageUrl : string,
-    allergenes : array of string,
+    allergenes : string array,
     maxAmountOfParticipants : number,
     price : decimal
 ```
@@ -173,7 +186,7 @@ Request: GET
 #### Get by id
 ```javascript
 // must be logged in
-Route: /api/meal/:id
+Route: /api/meal/:meaId
 Request: GET
 Parameter: mealId
 ```
@@ -181,7 +194,7 @@ Parameter: mealId
 #### Update
 ```javascript
 // must be logged in
-Route: /api/meal/:id
+Route: /api/meal/:mealId
 Request: PUT
 Parameter: mealId
 Body:
@@ -201,15 +214,15 @@ Body:
 #### Delete
 ```javascript
 // must be logged in
-Route: /api/meal/:id
+Route: /api/meal/:meaId
 Request: DELETE
 Parameter: mealId
 ```
 
-#### Add participation
+#### Add or delete participation
 ```javascript
 // must be logged in
-Route: /api/meal/:id/participate
+Route: /api/meal/:mealId/participate
 Request: GET
 Parameter: mealId
 ```
